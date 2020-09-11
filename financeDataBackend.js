@@ -1,5 +1,5 @@
 console.log('Initializing Git');
-const apiKey = 'btdehvf48v6r4rftnp00';
+const apiKey = '';
 
 const axiosRequest = require('axios');
 
