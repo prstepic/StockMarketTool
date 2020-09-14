@@ -3,6 +3,10 @@
 ## Use
 This tool will help me target different stocks to invest in using various trading strategies
 
+## Motivation
+As a new investor/trader, there are limited tools that help me target specific stocks to invest in based on my buying power and other factors. I wanted to make an app that I can use to learn about the stock market, as well as, receive real time information and recommendations that I can evaluate and make investing decisions. This tool will allow me to receive investing recommendations from Finnhub.io based on factors important for investing. This application is targeted at new investors and those who simply don't have time in their schedules to research the market but still want to invest and trade consistently. The stock market can be a hard and daunting thought for most and I hope this application can mitigate some of those fears and encourage everyone to trade intelligently. 
+To start this application will only recommend stocks to the user. It is then on the user to analyze the recommendations and actually buy/sell. As the application is developed, I hope to continue to give the user more intelligent recommendations and allow for further customization for the user. Also, in the future, I would like to provide users with performance of certain strategies.
+
 ## Basic Architecture
 ![Basic Architecture](archDocs/basicArchDiagram.png)
 
