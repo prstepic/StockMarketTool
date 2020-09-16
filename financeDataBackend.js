@@ -1,4 +1,4 @@
-const apiKey = 'btgplsf48v6u6od74cb0';
+const apiKey = '';
 
 const expressServer = require('express');
 const server = expressServer();
