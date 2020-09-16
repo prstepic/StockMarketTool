@@ -43,4 +43,9 @@ The end user will be able to view recommended stocks based on different variable
 
 The frontend of the application will be implemented with Vue.js. Vue was chosen because the application will act reactively as the user interacts with it
 
+### Server Request Handling
+First the server will initialize and start listening on a localhost port
+Once the server is up and running, the server should be able to begin handling client requests for financial data
+
+
 
