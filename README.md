@@ -48,6 +48,7 @@ First the server will initialize and start listening on a localhost port
 Once the server is up and running, the server should be able to begin handling client requests for financial data
 
 **Implementation**
+
 This is done by listening on the port with Express. Then when a HTTP GET request is received on the port, the server contacts the Finnhub.io Servers with an Axios GET request. This Axios GET request returns a Promise. Once that Promise is resolved (or rejected), the server will send the client, who sent the original GET request, the data returned by Finnhub.io (or an error message if the Promise was rejected) through an Express send.
 
 
