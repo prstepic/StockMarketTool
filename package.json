@@ -5,7 +5,8 @@
   "main": "financeDataBackend.js",
   "dependencies": {
     "axios": "^0.20.0",
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "mongodb": "^3.6.2"
   },
   "devDependencies": {},
   "scripts": {
