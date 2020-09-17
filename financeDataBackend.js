@@ -1,9 +1,16 @@
-const apiKey = '';
+const apiKey = '<apiKey-hidden>';
 
 const expressServer = require('express');
 const server = expressServer();
 const port = 8080;
 const axiosRequest = require('axios');
+const database = require('mongodb');
+const userDbPassword = '<password-hidden>';
+const user = '<user-hidden';
+const dbName = 'userFinancialData';
+const clusterUrl = 'mongodb+srv://'+ user + ':' + userDbPassword + 
+                    '@stockmarkettoolcluster.ejvhb.mongodb.net/' + dbName + '?retryWrites=true&w=majority';
+const dbClient = new database.MongoClient(clusterUrl, {useUnifiedTopology: true});
 
 server.listen(port, () => {
     console.log('Now accepting connections on port 8080');
@@ -24,6 +31,14 @@ server.get('/financialData', (req, res) => {
 
 server.get('/', (req,res) => {
     res.send('Server is up and running');
+});
+
+dbClient.connect()
+.then( () => {
+    console.log('Database connected');
+})
+.catch( (error) => {
+    console.log('Error: ' + error);
 });
 
 function getFinancialInfo() {
