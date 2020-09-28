@@ -36,6 +36,15 @@ server.get('/financialData', (req, res) => {
         }
         // return the list back to the user
         res.send(listOfTickers);
+        getStocksWithinBudget(listOfTickers, 50)
+        .then((data) => {
+            for(let i = 0; i < data.length; i++){
+                console.log("data returned: " + data[i].symbol + " " + data[i].price);
+            }
+        })
+        .catch((error) => {
+            console.log("Error: " + error);
+        });
     })
     .catch( (error) => { // catch any errors with the Finnhub.io connection
         res.send("Error: " + error);
@@ -63,6 +72,60 @@ function getTickers(market){
     let requestUrl = 'https://finnhub.io/api/v1/stock/symbol?exchange=' + market + '&token=' + apiKey;
     return axiosRequest.get(requestUrl);
 }
+
+// this function will take in a list of stock symbols and return the ones under a certain inputted price
+function getStocksWithinBudget(symbols, budget){
+    let listOfRequests = [];
+    let index = 0;
+
+    // promise to be resolved once all requests have been made
+    // although it will not wait for the requests to complete
+    let requestsComplete = new Promise( (resolve, reject) => {
+
+        // make 30 calls (the finnhub.io rate limit) every minute for the stock tickers in the symbols list
+        // push each axios request to a list once its made and increase the index by 30 at each iteration
+        // stop the interval once all requests have been made then resolve the promise with the list of requests
+        let rateLimit = setInterval(() => {
+            let j = 0;
+            while(j < 30){
+                let requestUrl = 'https://finnhub.io/api/v1/quote?symbol=' + symbols[index + j] + '&token=' + apiKey;
+                console.log('Making request for: ' + requestUrl);
+                listOfRequests.push(axiosRequest.get(requestUrl));
+                j++;
+            }
+            index += 30
+            if(index >= symbols.length){
+                clearInterval(rateLimit);
+                resolve(listOfRequests);
+            }
+        }, 60000);
+    });
+    
+    // once all the axios requests have been pushed to listOfRequests resolving requestsComplete
+    // wait for all requests inside listOfRequests to complete which will resolve Promise.all to one Promise
+    // containing a list of the resolved data of each promise within listOfRequests
+    // using this resolved data return a list of objects containing the symbols that fit within the budget
+    return requestsComplete
+    .then(data => {
+        return Promise.all(data);
+    })
+    .then( (listOfResults) => {
+        let listOfStockPrices = [];
+        for(let i = 0; i < listOfResults.length; i++){
+            if(listOfResults[i].data.c < budget){
+                let newStockObj = {
+                    symbol: symbols[i],
+                    price: listOfResults[i].data.c
+                };
+                listOfStockPrices.push(newStockObj);
+            }
+        }
+        return listOfStockPrices;
+    });
+}
+
+
+
 
 
 
