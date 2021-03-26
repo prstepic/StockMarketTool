@@ -4,7 +4,7 @@
   "description": "This tool will help me target different stocks to invest in using various trading strategies",
   "main": "financeDataBackend.js",
   "dependencies": {
-    "axios": "^0.20.0",
+    "axios": "^0.21.1",
     "express": "^4.17.1",
     "mongodb": "^3.6.2"
   },
