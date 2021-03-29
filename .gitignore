@@ -1,0 +1,5 @@
+# Ignore git modules
+node_modules/
+
+# Ignore client side folder
+client/
