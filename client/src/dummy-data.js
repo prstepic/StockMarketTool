@@ -1,4 +1,4 @@
-export const fakeLastPrice = [
+export const fakeLastPrices = [
   {
     ticker: 'AAPL',
     lastPrice: '120',

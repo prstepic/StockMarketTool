@@ -12,12 +12,16 @@ const routes = [
     component: HomePage
   },
   {
-    path: '/detailed',
+    path: '/detailed/:ticker',
     name: 'Detailed',
     component: DetailedPage
   },
   {
     path: '/',
+    redirect: '/homepage'
+  },
+  {
+    path:'/detailed',
     redirect: '/homepage'
   }
 ]
