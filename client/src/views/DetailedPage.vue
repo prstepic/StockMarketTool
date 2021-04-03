@@ -17,7 +17,7 @@
     name: 'DetailedPage',
     data() {
       return {
-        symbol: fakeLastPrices.find( (stock) => stock.ticker === this.$route.params.ticker),
+        symbol: fakeLastPrices.find( (stock) => stock.ticker === this.$route.params.ticker)
       }
     },
     methods: {
