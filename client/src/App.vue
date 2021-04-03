@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <h1> Market QuickCheck </h1>
     <NavigationBar/>
     <router-view/>
   </div>

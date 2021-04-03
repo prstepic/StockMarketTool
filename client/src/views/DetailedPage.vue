@@ -1,5 +1,5 @@
 <template>
-  <div class="detailedPage">
+  <div class="detailedPage" v-if="symbol">
     <h1 class="symbolTitle"> {{ symbol.ticker }} </h1>
     <p class="lastPrice"> Last Price: ${{ symbol.lastPrice }} </p>
     <p class="asOfDate"> As of: {{ symbol.date }} </p>
@@ -9,10 +9,12 @@
       MARKET IS CLOSED
     </p>
   </div>
+  <PageNotFound v-else/>
 </template>
 
 <script>
   import { fakeLastPrices } from '../dummy-data'
+  import PageNotFound from './PageNotFound'
   export default {
     name: 'DetailedPage',
     data() {
@@ -33,12 +35,14 @@
           return false
         }
       }
+    },
+    components: {
+      PageNotFound
     }
+    
   }
 </script>
 
 <style scoped>
-  h1 {
-    color: green;
-  }
+  
 </style>
