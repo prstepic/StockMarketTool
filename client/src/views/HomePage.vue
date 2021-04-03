@@ -9,7 +9,7 @@
       >
         <h3 class="tickerName"> {{ stock.ticker }} </h3>
         <h5 class="tickerPrice"> ${{ stock.lastPrice }} </h5>
-        <p class="marketDate"> {{ stock.date }} </p>
+        <p class="marketDate"> {{ currentDate().month }}/{{ currentDate().day }}/{{ currentDate().year }} </p>
         <router-link v-bind:to="'/detailed/' + stock.ticker">
           <button> View stock </button> 
         </router-link>
@@ -26,6 +26,17 @@
       return {
         fakeLastPrices
       }
+    },
+    methods: {
+      currentDate() {
+        var d = new Date()
+        var today = {
+          month: d.getMonth() + 1,
+          day: d.getDay() + 1,
+          year: d.getFullYear()
+        }
+        return today
+      }
     }
   }
 </script>
@@ -38,7 +49,7 @@
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 50px;
-    grid-auto-rows: minmax(100px, auto);
+    grid-auto-rows: minmax(200px, auto);
   }
   .stockItem {
     border: 1px solid black;

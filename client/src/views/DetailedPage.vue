@@ -4,7 +4,7 @@
     <p class="lastPrice"> Last Price: ${{ symbol.lastPrice }} </p>
     <p class="asOfDate"> As of: {{ symbol.date }} </p>
     <p class="marketHours"
-      v-show="!marketOpen"
+      v-show="!isMarketOpen()"
     >
       MARKET IS CLOSED
     </p>
@@ -18,7 +18,6 @@
     data() {
       return {
         symbol: fakeLastPrices.find( (stock) => stock.ticker === this.$route.params.ticker),
-        marketClose: false
       }
     },
     methods: {
@@ -28,10 +27,10 @@
         var hours = d.getHours()
         var day = d.getDay()
         if((day > 0 && day < 6) && ((hours > 8 && hours < 15) || (hours == 8 && minutes > 30 && hours < 15))){
-          this.marketOpen = true
+          return true
         }
         else {
-          this.marketClose = false
+          return false
         }
       }
     }
