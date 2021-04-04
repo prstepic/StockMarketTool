@@ -18,7 +18,14 @@ app.get('/', (req, res) => {
 })
 
 app.get('/API/user/:username/stockList', (req, res) => {
-  res.status(200).json(fakeLastPrices)
+  const user = req.params.username
+  const userList = fakeLastPrices.find( (id) => id.username === user)
+  if(userList){
+    res.status(200).json(userList.stockList)
+  }
+  else {
+    res.status(400).json('User not found')
+  }
 })
 
 app.get('/API/DowJones', (req, res) => {
