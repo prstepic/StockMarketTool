@@ -39,16 +39,16 @@ export const fakeLastPrices = [
 
 export const indices = [
   {
-    symbol: 'DJIA',
-    lastValue: '33153.21'
+    ticker: 'DJIA',
+    lastPrice: '33153.21'
   },
   {
-    symbol: 'IXIC',
-    lastValue: '13480.10'
+    ticker: 'IXIC',
+    lastPrice: '13480.10'
   },
   {
-    symbol: 'INX',
-    lastValue: '4019.87'
+    ticker: 'INX',
+    lastPrice: '4019.87'
   }
 ]
 

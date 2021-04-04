@@ -9,6 +9,9 @@ import PageNotFound from '../views/PageNotFound.vue'
 
 Vue.use(VueRouter)
 
+/* routes each url to a Vue in the project using the component: property
+The '*' handles other url's not handled by the router
+*/
 const routes = [
   {
     path: '/homepage',

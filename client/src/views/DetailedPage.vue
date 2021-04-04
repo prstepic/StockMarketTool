@@ -1,20 +1,18 @@
 <template>
-  <div class="detailedPage" v-if="symbol">
-    <h1 class="symbolTitle"> {{ symbol.ticker }} </h1>
-    <p class="lastPrice"> Last Price: ${{ symbol.lastPrice }} </p>
-    <p class="asOfDate"> As of: {{ symbol.date }} </p>
-    <p class="marketHours"
-      v-show="!isMarketOpen()"
-    >
-      MARKET IS CLOSED
-    </p>
-  </div>
-  <PageNotFound v-else/>
+  <!-- Display the detailed information of a stock using the StockDetail component 
+  StockDetail's stockSymbol prop value will be filled with symbol using v-bind
+  -->
+  <StockDetail :stockSymbol="symbol" />
 </template>
 
 <script>
   import { fakeLastPrices } from '../dummy-data'
-  import PageNotFound from './PageNotFound'
+  import StockDetail from '../components/StockDetail.vue'
+
+  /* Export the Vue with name DetailedPage so it can be referenced elsewhere (i.e. the router)
+  The symbol will be found in the Array of stocks using find()
+  The StockDetail component will be used to show the information about a stock
+  */
   export default {
     name: 'DetailedPage',
     data() {
@@ -23,21 +21,10 @@
       }
     },
     methods: {
-      isMarketOpen() {
-        var d = new Date()
-        var minutes = d.getMinutes()
-        var hours = d.getHours()
-        var day = d.getDay()
-        if((day > 0 && day < 6) && ((hours > 8 && hours < 15) || (hours == 8 && minutes > 30 && hours < 15))){
-          return true
-        }
-        else {
-          return false
-        }
-      }
+      
     },
     components: {
-      PageNotFound
+      StockDetail
     }
     
   }

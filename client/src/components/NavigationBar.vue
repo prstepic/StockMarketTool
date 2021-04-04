@@ -1,4 +1,5 @@
 <template>
+  <!-- div to contain router links that will link to different pages -->
   <div id="navBar">
     <router-link to="/homepage" id="homeLink">
       <p> Stock Dashboard </p>
@@ -16,13 +17,15 @@
 </template>
 
 <script>
+  // Export the component with name NavigationBar so it can be used elsewhere
   export default {
     name: 'NavigationBar'
   }
 </script>
 
 <style scoped>
-  h1 {
-
+  #navBar {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
   }
 </style>
