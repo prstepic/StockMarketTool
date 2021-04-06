@@ -6,6 +6,7 @@ import DowJonesPage from '../views/DowJonesPage.vue'
 import NasdaqPage from '../views/NasdaqPage.vue'
 import SandP500Page from '../views/SandP500Page.vue'
 import PageNotFound from '../views/PageNotFound.vue'
+import LandingPage from '../views/LandingPage.vue'
 
 Vue.use(VueRouter)
 
@@ -25,7 +26,8 @@ const routes = [
   },
   {
     path: '/',
-    redirect: '/homepage'
+    name: 'Landing',
+    component: LandingPage
   },
   {
     path: '/djia',
