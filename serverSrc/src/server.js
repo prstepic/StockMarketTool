@@ -51,14 +51,17 @@ app.get('/API/info/:symbol', (req, res) => {
   }
 })
 
+// --TODO-- When connecting client and server
 app.post('/API/addStockToList', (req, res) => {
 
 })
 
+//--TODO-- When connecting client and server
 app.post('/API/addUser', (req, res) => {
 
 })
 
+//--TODO-- When connecting client and server
 app.delete('/API/removeStockFromList', (req, res) => {
 
 })
