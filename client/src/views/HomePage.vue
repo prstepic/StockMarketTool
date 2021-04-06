@@ -7,6 +7,9 @@
   -->
   <div class="pageView">
     <StockGrid :stocks="fakeLastPrices" />
+    <div>
+      <button v-on:click="addStock"> Test: Add stock </button>
+    </div>
   </div>
 </template>
 
@@ -28,7 +31,12 @@
       StockGrid
     },
     methods: {
-      
+      addStock() {
+        fakeLastPrices.push({
+          ticker: "SOXX",
+          lastPrice: "450"
+        })
+      }
     }
   }
 </script>
