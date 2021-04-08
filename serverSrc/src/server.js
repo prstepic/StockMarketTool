@@ -3,6 +3,7 @@ const mongodb = require("mongodb")
 
 import { fakeLastPrices } from '../dummy-data'
 import { indices } from '../dummy-data'
+import { stockPrices } from '../dummy-data'
 
 const app = express()
 const port = 9090
@@ -42,7 +43,7 @@ app.get('/API/SandP500', (req, res) => {
 
 app.get('/API/info/:symbol', (req, res) => {
   const symb = req.params.symbol
-  const stockData = fakeLastPrices.find( (stock) => stock.ticker === symb)
+  const stockData = stockPrices.find( (stock) => stock.ticker === symb)
   if(stockData){
     res.status(200).json(stockData)
   }

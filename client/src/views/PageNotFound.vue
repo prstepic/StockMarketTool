@@ -1,10 +1,20 @@
 <template>
-  <h1> 404: Not Found </h1>
+  <div class="pageView">
+    <h1> 404: Not Found </h1>
+    <button v-on:click="backHome">
+      Back Home
+    </button>
+  </div>
 </template>
 
 <script>
   export default {
-    name: 'PageNotFound'
+    name: 'PageNotFound',
+    methods: {
+      backHome() {
+        this.$router.push('/')
+      }
+    }
   }
 </script>
 

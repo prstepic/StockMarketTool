@@ -4,9 +4,9 @@
       <label for="usernameInput"> Please enter your username </label>
       <input type="text" v-model="username" id="usernameInput">
     </form>
-    <router-link :to="'/' + username + '/homepage'">
+    <button v-on:click="setUser(username)">
       Go
-    </router-link>
+    </button>
   </div>
 </template>
 
@@ -20,7 +20,9 @@
     },
     methods: {
       setUser(user) {
-        console.log(user)
+        localStorage.setItem('username', user)
+        const userPage = '/' + user + '/homepage'
+        this.$router.push(userPage)
       }
     }
   }

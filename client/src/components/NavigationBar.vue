@@ -1,7 +1,7 @@
 <template>
   <!-- div to contain router links that will link to different pages -->
   <div id="navBar">
-    <router-link to="/homepage" id="homeLink">
+    <router-link to="/" id="homeLink">
       <p> Stock Dashboard </p>
     </router-link>
     <router-link to="/djia" id="dowLink">
@@ -19,7 +19,12 @@
 <script>
   // Export the component with name NavigationBar so it can be used elsewhere
   export default {
-    name: 'NavigationBar'
+    name: 'NavigationBar',
+    methods: {
+      getUserName(){
+        return localStorage.getItem('username')
+      }
+    }
   }
 </script>
 
