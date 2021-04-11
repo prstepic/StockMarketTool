@@ -70,7 +70,7 @@
       }
     },
     created(){
-      const userRequest = '/API/user/' + localStorage.getItem('username') + '/stockList'
+      const userRequest = '/API/user/' + this.$route.params.username + '/stockList'
       axios.get(userRequest)
       .then( (response) => {
         this.stockList = response.data

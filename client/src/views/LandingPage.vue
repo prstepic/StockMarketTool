@@ -18,11 +18,12 @@
         username: ''
       }
     },
-    methods: {
+    methods: { 
       setUser(user) {
         localStorage.setItem('username', user)
         const userPage = '/' + user + '/homepage'
         this.userName = user
+        this.$parent.currentUser = user
         this.$router.push(userPage)
       }
     }

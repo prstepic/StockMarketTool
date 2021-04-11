@@ -23,13 +23,10 @@
   // Export the component with name NavigationBar so it can be used elsewhere
   export default {
     name: 'NavigationBar',
+    props: ['username'],
     methods: {
-      getUserName(){
-        return localStorage.getItem('username')
-      },
       goToUserHome(){
-        const user = this.getUserName()
-        const url = "/" + user + "/homepage"
+        const url = "/" + this.username + "/homepage"
         return url
       }
     }

@@ -1,6 +1,7 @@
 const express = require('express')
 const mongodb = require('mongodb')
 const finnhub = require('finnhub')
+const axios = require('axios')
 
 import { fakeLastPrices } from '../dummy-data'
 import { indices } from '../dummy-data'
@@ -29,7 +30,27 @@ app.get('/', (req, res) => {
 app.get('/API/user/:username/stockList', (req, res) => {
   const user = req.params.username
   const userList = fakeLastPrices.find( (id) => id.username === user)
-  res.status(200).json(userList.stockList)
+  if(userList) {
+    var url = 'https://finnhub.io/api/v1/quote?token=' + loginInfo.finnhubKey + '&symbol='
+    var axiosList = []
+    console.log(userList.stockList)
+    for(var i = 0; i < userList.stockList.length;i++){
+      const reqUrl = url + userList.stockList[i].ticker
+      axiosList.push(axios.get(reqUrl))
+    }
+    axios.all(axiosList)
+    .then( (responses) => {
+      console.log(responses)
+    })
+    .catch( (error) => {
+      console.log('could not get stock data from finnhub')
+      res.status(404).json('Could not retrieve stock data: ' + error)
+    })
+    res.status(200).json(userList.stockList)
+  }
+  else{
+    res.status(404).json('User not found')
+  }
 })
 
 app.get('/API/DowJones', (req, res) => {
