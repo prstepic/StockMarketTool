@@ -70,6 +70,6 @@ app.post('/API/addUser', (req, res) => {
 })
 
 //--TODO-- When connecting client and server
-app.delete('/API/removeStockFromList', (req, res) => {
-
+app.post('/API/removeStockFromList', (req, res) => {
+  res.status(200).json('Success')
 })

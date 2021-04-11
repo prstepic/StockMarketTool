@@ -14,7 +14,7 @@
 
 <script>
   import StockGridItem from './StockGridItem'
-
+  import axios from 'axios'
   /* Export the component with name StockGrid so it can be used elsewhere
   This component will use StockGridItem components found in StockGridItem.vue
   A prop value of stocks will be passed to the component which will be an Array of objects
@@ -29,7 +29,18 @@
       removeStock(stockToRemove){
         const indexOfStock = this.findIndex(stockToRemove, this.stocks)
         if(indexOfStock != -1){
-          this.stocks.splice(indexOfStock, 1)
+          axios.post('/API/removeStockFromList', {
+            stockTicker: stockToRemove
+          })
+          .then( () => {
+            this.stocks.splice(indexOfStock, 1)
+          })
+          .catch( (error) => {
+            console.log(error)
+          })
+        }
+        else{
+          console.log('Stock already in list')
         }
       },
       findIndex(stock, stockList){
