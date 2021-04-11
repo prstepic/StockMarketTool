@@ -1,7 +1,7 @@
 <template>
   <!-- div to contain router links that will link to different pages -->
   <div id="navBar">
-    <router-link to="/" id="homeLink">
+    <router-link :to="goToUserHome()" id="homeLink">
       <p> Stock Dashboard </p>
     </router-link>
     <router-link to="/djia" id="dowLink">
@@ -23,6 +23,11 @@
     methods: {
       getUserName(){
         return localStorage.getItem('username')
+      },
+      goToUserHome(){
+        const user = this.getUserName()
+        const url = "/" + user + "/homepage"
+        return url
       }
     }
   }

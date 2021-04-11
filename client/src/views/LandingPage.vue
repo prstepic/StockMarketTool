@@ -22,6 +22,7 @@
       setUser(user) {
         localStorage.setItem('username', user)
         const userPage = '/' + user + '/homepage'
+        this.userName = user
         this.$router.push(userPage)
       }
     }
