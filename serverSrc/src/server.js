@@ -1,10 +1,13 @@
 const express = require("express")
 const mongodb = require("mongodb")
+const axios = require('axios')
 
 import { fakeLastPrices } from '../dummy-data'
 import { indices } from '../dummy-data'
 import { stockPrices } from '../dummy-data'
+import { loginInfo} from '../loginInfo'
 
+const fhKey = loginInfo.finnhubKey
 const app = express()
 const port = 9090
 
