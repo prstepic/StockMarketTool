@@ -1,20 +1,28 @@
-const express = require("express")
-const mongodb = require("mongodb")
-const axios = require('axios')
+const express = require('express')
+const mongodb = require('mongodb')
+const finnhub = require('finnhub')
 
 import { fakeLastPrices } from '../dummy-data'
 import { indices } from '../dummy-data'
 import { stockPrices } from '../dummy-data'
-import { loginInfo} from '../loginInfo'
+import { loginInfo } from '../loginInfo'
 
-const fhKey = loginInfo.finnhubKey
+const api_key = finnhub.ApiClient.instance.authentications['api_key']
+api_key.apiKey = loginInfo.finnhubKey
+const finnhubClient = new finnhub.DefaultApi()
+const mongoCreds = loginInfo.mongoAuth
 const app = express()
 const port = 9090
+
+
 
 app.use(express.json())
 
 app.listen(port, () => {
     console.log('server running on port ' + port)
+    finnhubClient.stockCandles("AAPL", "D", 1590988249, 1591852249, {}, (error, data, respponse) => { 
+      console.log(data)
+    })
 })
 
 app.get('/', (req, res) => {
