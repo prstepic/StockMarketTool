@@ -20,9 +20,6 @@ app.use(express.json())
 
 app.listen(port, () => {
     console.log('server running on port ' + port)
-    finnhubClient.stockCandles("AAPL", "D", 1590988249, 1591852249, {}, (error, data, respponse) => { 
-      console.log(data)
-    })
 })
 
 app.get('/', (req, res) => {
@@ -32,12 +29,7 @@ app.get('/', (req, res) => {
 app.get('/API/user/:username/stockList', (req, res) => {
   const user = req.params.username
   const userList = fakeLastPrices.find( (id) => id.username === user)
-  if(userList){
-    res.status(200).json(userList.stockList)
-  }
-  else {
-    res.status(400).json('User not found')
-  }
+  res.status(200).json(userList.stockList)
 })
 
 app.get('/API/DowJones', (req, res) => {
@@ -54,25 +46,27 @@ app.get('/API/SandP500', (req, res) => {
 
 app.get('/API/info/:symbol', (req, res) => {
   const symb = req.params.symbol
-  const stockData = stockPrices.find( (stock) => stock.ticker === symb)
-  if(stockData){
-    res.status(200).json(stockData)
-  }
-  else {
-    res.status(404).json('Could not get information for request')
-  }
+  finnhubClient.quote(symb, (error, data, response) => {
+    if(data.c == 0){
+      res.status(404).json('Can not retrieve symbol')
+    }
+    else{
+      res.status(200).json(data)
+    }
+  })
 })
 
 // --TODO-- When connecting client and server
 app.post('/API/addStockToList', (req, res) => {
   const stockToGet = req.body.stockTicker
-  const stockData = stockPrices.find( (stock) => stock.ticker === stockToGet)
-  if(stockData){
-    res.status(200).json(stockData)
-  }
-  else{
-    res.status(404).json('Could not retrieve: ' + stockToGet)
-  }
+  finnhubClient.quote(stockToGet, (error, data, response) => {
+    if(data.c == 0){
+      res.status(404).json('Can not retrieve symbol')
+    }
+    else{
+      res.status(200).json(data.c)
+    }
+  })
 })
 
 //--TODO-- When connecting server to database

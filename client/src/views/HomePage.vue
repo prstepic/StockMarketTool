@@ -48,7 +48,11 @@
           stockTicker: upperTicker
           })
           .then( (response) => {
-            this.stockList.push(response.data)
+            console.log(response)
+            this.stockList.push({
+              ticker: upperTicker,
+              lastPrice: response.data
+            })
           })
           .catch( (error) => {
             alert('Sorry, stock not found!')

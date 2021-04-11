@@ -16,20 +16,29 @@
     name: 'DetailedPage',
     data() {
       return {
-        symbol: {}
+        symbol: {
+          ticker: this.$route.params.ticker.toUpperCase(),
+          openPrice: '',
+          highPrice: '',
+          lowPrice: '',
+          currentPrice: '',
+          prevClose: ''
+        }
       }
-    },
-    methods: {
-      
     },
     components: {
       StockDetail
     },
     created() {
-      const requestUrl = '/API/info/' + this.$route.params.ticker
+      const upperSymbol = this.$route.params.ticker.toUpperCase()
+      const requestUrl = '/API/info/' + upperSymbol
       axios.get(requestUrl)
       .then( (response) => {
-        this.symbol = response.data
+        this.symbol.openPrice = response.data.o
+        this.symbol.highPrice = response.data.h
+        this.symbol.lowPrice = response.data.l
+        this.symbol.currentPrice = response.data.c
+        this.symbol.prevClose = response.data.pc
       })
       .catch( (error) => {
         console.log(error)
