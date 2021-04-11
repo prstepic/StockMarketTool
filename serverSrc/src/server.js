@@ -54,10 +54,17 @@ app.get('/API/info/:symbol', (req, res) => {
 
 // --TODO-- When connecting client and server
 app.post('/API/addStockToList', (req, res) => {
-
+  const stockToGet = req.body.stockTicker
+  const stockData = stockPrices.find( (stock) => stock.ticker === stockToGet)
+  if(stockData){
+    res.status(200).json(stockData)
+  }
+  else{
+    res.status(404).json('Could not retrieve: ' + stockToGet)
+  }
 })
 
-//--TODO-- When connecting client and server
+//--TODO-- When connecting server to database
 app.post('/API/addUser', (req, res) => {
 
 })

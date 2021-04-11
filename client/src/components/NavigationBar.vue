@@ -1,8 +1,11 @@
 <template>
   <!-- div to contain router links that will link to different pages -->
   <div id="navBar">
-    <router-link :to="goToUserHome()" id="homeLink">
-      <p> Stock Dashboard </p>
+    <router-link to="/" id="homeLink">
+      <p> Home </p>
+    </router-link>
+    <router-link :to="goToUserHome()" id="dashLink">
+      <p> Dashboard </p>
     </router-link>
     <router-link to="/djia" id="dowLink">
       <p> Dow Jones </p>

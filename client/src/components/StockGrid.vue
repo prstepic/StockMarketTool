@@ -6,6 +6,7 @@
   <div class="tickerGrid">
     <StockGridItem
       v-for="stock in stocks"
+      v-on:stockRemovalItem="removeStock($event)"
       :key="stock.ticker"
       :stock="stock"/>
   </div>
@@ -23,7 +24,23 @@
     components: {
       StockGridItem
     },
-    props: ['stocks']
+    props: ['stocks'],
+    methods: {
+      removeStock(stockToRemove){
+        const indexOfStock = this.findIndex(stockToRemove, this.stocks)
+        if(indexOfStock != -1){
+          this.stocks.splice(indexOfStock, 1)
+        }
+      },
+      findIndex(stock, stockList){
+        for(var i = 0; i < stockList.length; i++){
+          if(stockList[i].ticker === stock){
+            return i
+          }
+        }
+        return -1
+      }
+    }
   }
 </script>
 

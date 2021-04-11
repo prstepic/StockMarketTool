@@ -7,9 +7,13 @@
   -->
   <div class="pageView" v-if="stockList">
     <StockGrid :stocks="stockList" />
-    <div>
-      <button v-on:click="addStock"> Test: Add stock </button>
-    </div>
+    <form>
+      <label for="stockAddInput"> Add stock: </label>
+      <input type="text" v-model="stockName" id="stockAddInput">
+    </form>
+    <button v-on:click="addStock(stockName)">
+      Add Stock To Dashboard
+    </button>
   </div>
   <PageNotFound v-else/>
 </template>
@@ -25,7 +29,8 @@
     name: 'HomePage',
     data() {
       return {
-        stockList: []
+        stockList: [],
+        stockName: ''
       }
     },
     components: {
@@ -33,11 +38,31 @@
       PageNotFound
     },
     methods: {
-      addStock() {
-        this.stockList.push({
-          ticker: "SOXX",
-          lastPrice: "450"
-        })
+      addStock(ticker) {
+        const upperTicker = ticker.toUpperCase()
+        if(this.foundInList(upperTicker)) {
+          alert('Sorry, stock already in dashboard!')
+        }
+        else{
+          axios.post('/API/addStockToList', {
+          stockTicker: upperTicker
+          })
+          .then( (response) => {
+            this.stockList.push(response.data)
+          })
+          .catch( (error) => {
+            alert('Sorry, stock not found!')
+            console.log(error)
+          })
+        }
+      },
+      foundInList(stockTicker){
+        for(var i = 0; i < this.stockList.length; i++){
+          if(this.stockList[i].ticker == stockTicker) {
+            return true
+          }
+        }
+        return false
       }
     },
     created(){
@@ -48,7 +73,6 @@
       })
       .catch((error) => {
         console.log(error)
-        console.log('testing 1')
         this.stockList = null
       })
     }

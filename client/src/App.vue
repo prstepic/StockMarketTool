@@ -12,11 +12,6 @@
     name: 'App',
     components: {
       NavigationBar
-    },
-    data() {
-      return {
-        userName: ''
-      }
     }
   }
 </script>
