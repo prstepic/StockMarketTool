@@ -6,9 +6,8 @@
 </template>
 
 <script>
-  import { fakeLastPrices } from '../dummy-data'
   import StockDetail from '../components/StockDetail.vue'
-
+  import axios from 'axios'
   /* Export the Vue with name DetailedPage so it can be referenced elsewhere (i.e. the router)
   The symbol will be found in the Array of stocks using find()
   The StockDetail component will be used to show the information about a stock
@@ -17,7 +16,7 @@
     name: 'DetailedPage',
     data() {
       return {
-        symbol: fakeLastPrices.find( (stock) => stock.ticker === this.$route.params.ticker)
+        symbol: {}
       }
     },
     methods: {
@@ -25,8 +24,18 @@
     },
     components: {
       StockDetail
+    },
+    created() {
+      const requestUrl = '/API/info/' + this.$route.params.ticker
+      axios.get(requestUrl)
+      .then( (response) => {
+        this.symbol = response.data
+      })
+      .catch( (error) => {
+        console.log(error)
+        this.symbol = null
+      })
     }
-    
   }
 </script>
 

@@ -3,6 +3,7 @@ const mongodb = require("mongodb")
 
 import { fakeLastPrices } from '../dummy-data'
 import { indices } from '../dummy-data'
+import { stockPrices } from '../dummy-data'
 
 const app = express()
 const port = 9090
@@ -42,7 +43,7 @@ app.get('/API/SandP500', (req, res) => {
 
 app.get('/API/info/:symbol', (req, res) => {
   const symb = req.params.symbol
-  const stockData = fakeLastPrices.find( (stock) => stock.ticker === symb)
+  const stockData = stockPrices.find( (stock) => stock.ticker === symb)
   if(stockData){
     res.status(200).json(stockData)
   }
@@ -53,15 +54,22 @@ app.get('/API/info/:symbol', (req, res) => {
 
 // --TODO-- When connecting client and server
 app.post('/API/addStockToList', (req, res) => {
-
+  const stockToGet = req.body.stockTicker
+  const stockData = stockPrices.find( (stock) => stock.ticker === stockToGet)
+  if(stockData){
+    res.status(200).json(stockData)
+  }
+  else{
+    res.status(404).json('Could not retrieve: ' + stockToGet)
+  }
 })
 
-//--TODO-- When connecting client and server
+//--TODO-- When connecting server to database
 app.post('/API/addUser', (req, res) => {
 
 })
 
 //--TODO-- When connecting client and server
-app.delete('/API/removeStockFromList', (req, res) => {
-
+app.post('/API/removeStockFromList', (req, res) => {
+  res.status(200).json('Success')
 })

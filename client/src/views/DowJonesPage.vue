@@ -8,8 +8,8 @@
 </template>
 
 <script>
-  import { indices } from '../dummy-data'
   import StockDetail from '../components/StockDetail.vue'
+  import axios from 'axios'
 
   /* Export the Vue with name DowJonesPage so it can be referenced elsewhere (i.e. the router)
   The symbol will be found in the indices Array using find()
@@ -19,11 +19,21 @@
     name: 'DowJonesPage',
     data() {
       return {
-        marketIndex: indices.find( (index) => index.ticker === 'DJIA') 
+        marketIndex: {}
       }
     },
     components: {
       StockDetail
+    },
+    created() {
+      axios.get('/API/DowJones')
+      .then((response) => {
+        this.marketIndex = response.data
+      })
+      .catch( (error) => {
+        console.log(error)
+        this.marketIndex = null
+      })
     }
   }
 </script>

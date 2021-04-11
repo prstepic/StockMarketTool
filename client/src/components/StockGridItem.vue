@@ -7,10 +7,13 @@
   <div class="stockItem">
     <h3 class="tickerName"> {{ stock.ticker }} </h3>
     <h5 class="tickerPrice"> ${{ stock.lastPrice }} </h5>
-    <p class="marketDate"> {{ currentDate().month }}/{{ currentDate().day }}/{{ currentDate().year }} </p>
+    <p class="marketDate"> {{ month }}/{{ day }}/{{ year }} </p>
     <router-link v-bind:to="'/detailed/' + stock.ticker">
       <button> View stock </button> 
     </router-link>
+    <button v-on:click="$emit('stockRemovalItem',stock.ticker)">
+      Remove from Dashboard
+    </button>
   </div>
     
 </template>
@@ -23,16 +26,18 @@
   export default {
     name: 'StockGridItem',
     props: ['stock'],
-    methods: {
-      currentDate() {
-        var d = new Date()
-        var today = {
-          month: d.getMonth() + 1,
-          day: d.getDay() + 1,
-          year: d.getFullYear()
-        }
-        return today
+    data() {
+      return {
+        month: '',
+        day: '',
+        year: ''
       }
+    },
+    created() {
+      var d = new Date()
+      this.month = d.getMonth() + 1
+      this.day = d.getDate() + 1
+      this.year = d.getFullYear()
     }
   }
 </script>
