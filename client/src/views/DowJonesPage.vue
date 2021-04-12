@@ -20,7 +20,7 @@
     data() {
       return {
         marketIndex: {
-          ticker: 'DJIA',
+          ticker: 'DIA',
           currentPrice: ''
         }
       }
@@ -31,7 +31,7 @@
     created() {
       axios.get('/API/DowJones')
       .then((response) => {
-        this.marketIndex.currentPrice = response.data.lastPrice
+        this.marketIndex.currentPrice = response.data
       })
       .catch( (error) => {
         console.log(error)

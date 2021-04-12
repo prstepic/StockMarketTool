@@ -26,6 +26,7 @@ app.get('/', (req, res) => {
     res.send("Hello, the server is up")
 })
 
+// --TODO-- Database implementation
 app.get('/API/user/:username/stockList', (req, res) => {
   const user = req.params.username
   const userList = fakeLastPrices.find( (id) => id.username === user)
@@ -61,38 +62,59 @@ app.get('/API/user/:username/stockList', (req, res) => {
 })
 
 app.get('/API/DowJones', (req, res) => {
-  res.status(200).json(indices.find( (symbol) => symbol.ticker === 'DJIA'))
+  finnhubClient.quote('DIA', (error, data, response) => {
+    if(data.c != 0 && !error){
+      res.status(200).json(data.c)
+    }
+    else{
+      res.status(404).json('Server error')
+    }
+  })
 })
 
 app.get('/API/NASDAQ', (req, res) => {
-  res.status(200).json(indices.find( (symbol) => symbol.ticker === 'IXIC'))
+  finnhubClient.quote('QQQ', (error, data, response) => {
+    if(data.c != 0 && !error){
+      res.status(200).json(data.c)
+    }
+    else {
+      res.status(404).json('Server error')
+    }
+  })
 })
 
 app.get('/API/SandP500', (req, res) => {
-  res.status(200).json(indices.find( (symbol) => symbol.ticker === 'INX'))
+  finnhubClient.quote('SPY', (error, data, response) => {
+    if(data.c != 0 && !error){
+      res.status(200).json(data.c)
+    }
+    else {
+      res.status(404).json('Server error')
+    }
+  })
 })
 
 app.get('/API/info/:symbol', (req, res) => {
   const symb = req.params.symbol
   finnhubClient.quote(symb, (error, data, response) => {
-    if(data.c == 0){
-      res.status(404).json('Can not retrieve symbol')
-    }
-    else{
+    if(data.c != 0 && !error){
       res.status(200).json(data)
+    }
+    else {
+      res.status(404).json('Can not retrieve symbol')
     }
   })
 })
 
-// --TODO-- When connecting client and server
+// --TODO-- Database implementation
 app.post('/API/addStockToList', (req, res) => {
   const stockToGet = req.body.stockTicker
   finnhubClient.quote(stockToGet, (error, data, response) => {
-    if(data.c == 0){
-      res.status(404).json('Can not retrieve symbol')
+    if(data.c != 0 && !error){
+      res.status(200).json(data.c)
     }
     else{
-      res.status(200).json(data.c)
+      res.status(404).json('Can not retrieve symbol')
     }
   })
 })
@@ -102,7 +124,7 @@ app.post('/API/addUser', (req, res) => {
 
 })
 
-//--TODO-- When connecting client and server
+//--TODO-- When connecting server to database
 app.post('/API/removeStockFromList', (req, res) => {
   res.status(200).json('Success')
 })

@@ -19,7 +19,7 @@
     data() {
       return {
         marketIndex: {
-          ticker: 'IXIC',
+          ticker: 'QQQ',
           currentPrice: ''
         }
       }
@@ -30,7 +30,7 @@
     created() {
       axios.get('/API/NASDAQ')
       .then((response) => {
-        this.marketIndex.currentPrice = response.data.lastPrice
+        this.marketIndex.currentPrice = response.data
       })
       .catch( (error) => {
         console.log(error)

@@ -15,7 +15,7 @@
     },
     data() {
       return {
-        currentUser: ''
+        currentUser: localStorage.getItem('username')
       }
     }
   }
