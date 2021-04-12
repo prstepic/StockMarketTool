@@ -36,7 +36,7 @@
     created() {
       var d = new Date()
       this.month = d.getMonth() + 1
-      this.day = d.getDate() + 1
+      this.day = d.getDate()
       this.year = d.getFullYear()
     }
   }

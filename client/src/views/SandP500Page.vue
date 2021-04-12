@@ -18,7 +18,10 @@
     name: 'SandP500Page.vue',
     data() {
       return {
-        marketIndex: {}
+        marketIndex: {
+          ticker: 'SPY',
+          currentPrice: ''
+        }
       }
     },
     components: {
@@ -27,7 +30,7 @@
     created() {
       axios.get('/API/SandP500')
       .then((response) => {
-        this.marketIndex = response.data
+        this.marketIndex.currentPrice = response.data.c
       })
       .catch( (error) => {
         console.log(error)

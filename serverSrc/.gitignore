@@ -1,2 +1,5 @@
 # Ignore git modules
 node_modules/
+
+# Ignore log in info so it is not public
+loginInfo.js

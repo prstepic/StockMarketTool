@@ -4,7 +4,7 @@
   -->
   <div class="detailedPage" v-if="stockSymbol">
     <h1 class="symbolTitle"> {{ stockSymbol.ticker }} </h1>
-    <p class="lastPrice"> Last Price: ${{ stockSymbol.lastPrice }} </p>
+    <p class="lastPrice"> Last Price: ${{ stockSymbol.currentPrice }} </p>
     <p class="asOfDate"> As of: {{ currentDate().month }}/{{ currentDate().day }}/{{ currentDate().year }}</p>
     <p class="marketHours"
       v-show="!isMarketOpen()"
@@ -28,7 +28,7 @@
     name: 'StockDetail',
     props: ['stockSymbol'],
     methods: {
-      isMarketOpen() {
+      isMarketOpen() { 
         var d = new Date()
         var minutes = d.getMinutes()
         var hours = d.getHours()
@@ -44,7 +44,7 @@
         var d = new Date()
         var today = {
           month: d.getMonth() + 1,
-          day: d.getDay() + 1,
+          day: d.getDate(),
           year: d.getFullYear()
         }
         return today

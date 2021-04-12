@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <h1> Market QuickCheck </h1>
-    <NavigationBar/>
+    <NavigationBar :username="currentUser"/>
     <router-view/>
   </div>
 </template>
@@ -12,6 +12,11 @@
     name: 'App',
     components: {
       NavigationBar
+    },
+    data() {
+      return {
+        currentUser: localStorage.getItem('username')
+      }
     }
   }
 </script>

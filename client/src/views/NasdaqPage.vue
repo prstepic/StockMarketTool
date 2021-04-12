@@ -18,7 +18,10 @@
     name: 'NasdaqPage',
     data() {
       return {
-        marketIndex: {}
+        marketIndex: {
+          ticker: 'QQQ',
+          currentPrice: ''
+        }
       }
     },
     components: {
@@ -27,7 +30,7 @@
     created() {
       axios.get('/API/NASDAQ')
       .then((response) => {
-        this.marketIndex = response.data
+        this.marketIndex.currentPrice = response.data.c
       })
       .catch( (error) => {
         console.log(error)

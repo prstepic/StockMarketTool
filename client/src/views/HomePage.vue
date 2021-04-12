@@ -48,7 +48,11 @@
           stockTicker: upperTicker
           })
           .then( (response) => {
-            this.stockList.push(response.data)
+            console.log(response)
+            this.stockList.push({
+              ticker: upperTicker,
+              lastPrice: response.data
+            })
           })
           .catch( (error) => {
             alert('Sorry, stock not found!')
@@ -66,7 +70,7 @@
       }
     },
     created(){
-      const userRequest = '/API/user/' + localStorage.getItem('username') + '/stockList'
+      const userRequest = '/API/user/' + this.$route.params.username + '/stockList'
       axios.get(userRequest)
       .then( (response) => {
         this.stockList = response.data
