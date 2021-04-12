@@ -64,7 +64,7 @@ app.get('/API/user/:username/stockList', (req, res) => {
 app.get('/API/DowJones', (req, res) => {
   finnhubClient.quote('DIA', (error, data, response) => {
     if(data.c != 0 && !error){
-      res.status(200).json(data.c)
+      res.status(200).json(data)
     }
     else{
       res.status(404).json('Server error')
@@ -75,7 +75,7 @@ app.get('/API/DowJones', (req, res) => {
 app.get('/API/NASDAQ', (req, res) => {
   finnhubClient.quote('QQQ', (error, data, response) => {
     if(data.c != 0 && !error){
-      res.status(200).json(data.c)
+      res.status(200).json(data)
     }
     else {
       res.status(404).json('Server error')
@@ -86,7 +86,7 @@ app.get('/API/NASDAQ', (req, res) => {
 app.get('/API/SandP500', (req, res) => {
   finnhubClient.quote('SPY', (error, data, response) => {
     if(data.c != 0 && !error){
-      res.status(200).json(data.c)
+      res.status(200).json(data)
     }
     else {
       res.status(404).json('Server error')

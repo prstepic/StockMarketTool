@@ -30,7 +30,7 @@
     created() {
       axios.get('/API/NASDAQ')
       .then((response) => {
-        this.marketIndex.currentPrice = response.data
+        this.marketIndex.currentPrice = response.data.c
       })
       .catch( (error) => {
         console.log(error)
