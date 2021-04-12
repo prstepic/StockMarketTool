@@ -5,7 +5,6 @@ const axios = require('axios')
 
 import { fakeLastPrices } from '../dummy-data'
 import { indices } from '../dummy-data'
-import { stockPrices } from '../dummy-data'
 import { loginInfo } from '../loginInfo'
 
 const api_key = finnhub.ApiClient.instance.authentications['api_key']
@@ -33,20 +32,28 @@ app.get('/API/user/:username/stockList', (req, res) => {
   if(userList) {
     var url = 'https://finnhub.io/api/v1/quote?token=' + loginInfo.finnhubKey + '&symbol='
     var axiosList = []
-    console.log(userList.stockList)
     for(var i = 0; i < userList.stockList.length;i++){
       const reqUrl = url + userList.stockList[i].ticker
       axiosList.push(axios.get(reqUrl))
     }
     axios.all(axiosList)
-    .then( (responses) => {
-      console.log(responses)
+    .then( axios.spread( (...responses) => {
+      var listToReturn = []
+      for(var i = 0; i < responses.length; i++){
+        listToReturn.push({
+          ticker: userList.stockList[i].ticker,
+          lastPrice: responses[i].data.c
+        })
+      }
+      return listToReturn
+    }))
+    .then( (stocks) => {
+      res.status(200).json(stocks)
     })
     .catch( (error) => {
       console.log('could not get stock data from finnhub')
       res.status(404).json('Could not retrieve stock data: ' + error)
     })
-    res.status(200).json(userList.stockList)
   }
   else{
     res.status(404).json('User not found')
