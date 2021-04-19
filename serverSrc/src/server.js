@@ -1,10 +1,9 @@
 const express = require('express')
-const mongodb = require('mongodb')
+const MongoDBClient = require('mongodb').MongoClient
 const finnhub = require('finnhub')
 const axios = require('axios')
 
 import { fakeLastPrices } from '../dummy-data'
-import { indices } from '../dummy-data'
 import { loginInfo } from '../loginInfo'
 
 const api_key = finnhub.ApiClient.instance.authentications['api_key']
@@ -13,20 +12,28 @@ const finnhubClient = new finnhub.DefaultApi()
 const mongoCreds = loginInfo.mongoAuth
 const app = express()
 const port = 9090
-
-
+const uri = 'mongodb+srv://' + mongoCreds.username + ':' + mongoCreds.password 
+            + '@stockmarkettoolcluster.ejvhb.mongodb.net/myFirstDatabase?retryWrites=true&w=majority'
 
 app.use(express.json())
 
 app.listen(port, () => {
-    console.log('server running on port ' + port)
+  const client = new MongoDBClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+  client.connect()
+  .then(() => {
+    console.log('database up')
+  })
+  .catch( (error) => {
+    console.log(error)
+  })
+  console.log('Server Up')
 })
 
 app.get('/', (req, res) => {
-    res.send("Hello, the server is up")
+  res.send("Hello, the server is up")
 })
 
-// --TODO-- Database implementation
+// --TODO-- Database implementation - Get list from mongodb for the user
 app.get('/API/user/:username/stockList', (req, res) => {
   const user = req.params.username
   const userList = fakeLastPrices.find( (id) => id.username === user)
@@ -106,7 +113,7 @@ app.get('/API/info/:symbol', (req, res) => {
   })
 })
 
-// --TODO-- Database implementation
+// --TODO-- Database implementation - Add the stock to a user's list in mongodb
 app.post('/API/addStockToList', (req, res) => {
   const stockToGet = req.body.stockTicker
   finnhubClient.quote(stockToGet, (error, data, response) => {
@@ -119,12 +126,12 @@ app.post('/API/addStockToList', (req, res) => {
   })
 })
 
-//--TODO-- When connecting server to database
+//--TODO-- When connecting server to database - add user to mongodb with empty list
 app.post('/API/addUser', (req, res) => {
 
 })
 
-//--TODO-- When connecting server to database
+//--TODO-- When connecting server to database - remove stock from user list in mongodb
 app.post('/API/removeStockFromList', (req, res) => {
   res.status(200).json('Success')
 })
