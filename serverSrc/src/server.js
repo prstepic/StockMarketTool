@@ -18,14 +18,6 @@ const uri = 'mongodb+srv://' + mongoCreds.username + ':' + mongoCreds.password
 app.use(express.json())
 
 app.listen(port, () => {
-  const client = new MongoDBClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
-  client.connect()
-  .then(() => {
-    console.log('database up')
-  })
-  .catch( (error) => {
-    console.log(error)
-  })
   console.log('Server Up')
 })
 
@@ -126,12 +118,56 @@ app.post('/API/addStockToList', (req, res) => {
   })
 })
 
-//--TODO-- When connecting server to database - add user to mongodb with empty list
-app.post('/API/addUser', (req, res) => {
 
+app.post('/API/addUser', (req, res) => {
+  const requestedUser = req.body.requestingUser
+  const client = new MongoDBClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+  client.connect()
+
+  .then( () => {
+    const dbClient = client.db(mongoCreds.dbName)
+    const userLists = dbClient.collection(mongoCreds.collection)
+    const findUser = userLists.find( {userName: requestedUser} )
+    console.log('Getting request')
+    return findUser.toArray().then( (result) => {
+      if(result.length == 0){
+        console.log('no user named: ' + requestedUser)
+        return userLists.insertOne({
+          userName: requestedUser,
+          listOfStocks: []
+        })
+        .then( () => {
+          console.log('success adding')
+          res.status(200).json('Successful user addition')
+        })
+        .catch( (error) => {
+          console.log('Database error: ' + error)
+          res.status(400).json('Internal Server Error')
+        })
+      }
+      else {
+        console.log('user found in db')
+        res.status(409).json('User Already Exists')
+      }
+    })
+    .catch( (error) => {
+      console.log('toArray error: ' + error)
+      res.status(400).json('Internal Server Error')
+    })
+    
+  })
+  .then( () => {
+    console.log('closing db')
+    client.close()
+  })
+  .catch( (error) => {
+    console.log('Server Error: ' + error)
+    res.status(400).json('Internal Server Error')
+  })
 })
 
 //--TODO-- When connecting server to database - remove stock from user list in mongodb
 app.post('/API/removeStockFromList', (req, res) => {
   res.status(200).json('Success')
 })
+
