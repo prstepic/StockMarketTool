@@ -3,7 +3,6 @@ const MongoDBClient = require('mongodb').MongoClient
 const finnhub = require('finnhub')
 const axios = require('axios')
 
-import { fakeLastPrices } from '../dummy-data'
 import { loginInfo } from '../loginInfo'
 
 const api_key = finnhub.ApiClient.instance.authentications['api_key']
