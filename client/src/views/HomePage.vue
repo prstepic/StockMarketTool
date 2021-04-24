@@ -6,7 +6,7 @@
   it then passes on to each StockGridItem
   -->
   <div class="pageView" v-if="stockList">
-    <StockGrid :stocks="stockList" />
+    <StockGrid :stocks="stockList" :user="this.$route.params.username" />
     <form>
       <label for="stockAddInput"> Add stock: </label>
       <input type="text" v-model="stockName" id="stockAddInput">
@@ -45,10 +45,10 @@
         }
         else{
           axios.post('/API/addStockToList', {
-          stockTicker: upperTicker
+          stockTicker: upperTicker,
+          userName: this.$route.params.username
           })
           .then( (response) => {
-            console.log(response)
             this.stockList.push({
               ticker: upperTicker,
               lastPrice: response.data
