@@ -11,7 +11,7 @@
     <router-link v-bind:to="'/detailed/' + stock.ticker">
       <button> View stock </button> 
     </router-link>
-    <button v-on:click="$emit('stockRemovalItem',stock.ticker)">
+    <button v-on:click="$emit('stockRemovalItem', stock.ticker)">
       Remove from Dashboard
     </button>
   </div>

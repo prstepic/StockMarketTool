@@ -24,13 +24,14 @@
     components: {
       StockGridItem
     },
-    props: ['stocks'],
+    props: ['stocks', 'user'],
     methods: {
       removeStock(stockToRemove){
         const indexOfStock = this.findIndex(stockToRemove, this.stocks)
         if(indexOfStock != -1){
           axios.post('/API/removeStockFromList', {
-            stockTicker: stockToRemove
+            stockTicker: stockToRemove,
+            userName: this.user
           })
           .then( () => {
             this.stocks.splice(indexOfStock, 1)
