@@ -22,7 +22,8 @@
           highPrice: '',
           lowPrice: '',
           currentPrice: '',
-          prevClose: ''
+          prevClose: '',
+          dayDiff: ''
         }
       }
     },
@@ -34,11 +35,12 @@
       const requestUrl = '/API/info/' + upperSymbol
       axios.get(requestUrl)
       .then( (response) => {
-        this.symbol.openPrice = response.data.o
-        this.symbol.highPrice = response.data.h
-        this.symbol.lowPrice = response.data.l
-        this.symbol.currentPrice = response.data.c
-        this.symbol.prevClose = response.data.pc
+        this.symbol.openPrice = (response.data.o).toFixed(2)
+        this.symbol.highPrice = (response.data.h).toFixed(2)
+        this.symbol.lowPrice = (response.data.l).toFixed(2)
+        this.symbol.currentPrice = (response.data.c).toFixed(2)
+        this.symbol.prevClose = (response.data.pc).toFixed(2)
+        this.symbol.dayDiff = (this.symbol.currentPrice - this.symbol.openPrice).toFixed(2)
       })
       .catch( (error) => {
         console.log(error)

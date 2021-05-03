@@ -3,8 +3,9 @@
   The stock information comes from the prop value stockSymbol
   -->
   <div class="detailedPage" v-if="stockSymbol">
-    <h1 class="symbolTitle"> {{ stockSymbol.ticker }} </h1>
+    <h1 class="symbolTitle" :style="{color: getDayChange()}" > {{ stockSymbol.ticker }} </h1>
     <p class="lastPrice"> Last Price: ${{ stockSymbol.currentPrice }} </p>
+    <p class="dayChange" :style="{color: getDayChange()}"> Change: {{ stockSymbol.dayDiff }} </p>
     <p class="asOfDate"> As of: {{ currentDate().month }}/{{ currentDate().day }}/{{ currentDate().year }}</p>
     <p class="marketHours"
       v-show="!isMarketOpen()"
@@ -48,6 +49,15 @@
           year: d.getFullYear()
         }
         return today
+      },
+      getDayChange() {
+
+        if(this.stockSymbol.dayDiff < 0){
+          return '#e02f61'
+        }
+        else {
+          return '#1ce63a'
+        }
       }
     },
     components: {
@@ -57,4 +67,13 @@
 </script>
 
 <style scoped>
+  .symbolTitle {
+    margin-top: 50px;
+  }
+  p {
+    color: #ab8bc9;
+  }
+  .lastPrice {
+    font-weight: bold;
+  }
 </style>

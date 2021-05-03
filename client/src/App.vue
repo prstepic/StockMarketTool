@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <h1> Market QuickCheck </h1>
+    <h1 id="title"> Market QuickCheck </h1>
     <NavigationBar :username="currentUser"/>
     <router-view/>
   </div>
@@ -21,25 +21,32 @@
   }
 </script>
 
-<style>
+<style lang="scss">
+@import "./overrideVariables.scss";
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
 }
 
-#nav {
-  padding: 30px;
+#title {
+  color: #ab8bc9;
 }
 
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
+label {
+  color: #ab8bc9;
 }
 
-#nav a.router-link-exact-active {
-  color: #42b983;
+input {
+  width: 30%;
+  background-color:transparent;
+  border: none;
+  border-bottom: 2px solid #ab8bc9;
+  color: white;
+  text-align: center;
+}
+input:focus {
+  outline: none;
 }
 </style>

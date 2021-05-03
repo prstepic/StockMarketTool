@@ -1,15 +1,19 @@
 <template>
   <div class="submissionPage">
-    <form>
-      <label for="usernameInput"> Please enter your username </label>
-      <input type="text" v-model="username" id="usernameInput">
-    </form>
-    <button v-on:click="setUser(username)">
+    <div id="userSubmission">
+      <form>
+        <label for="usernameInput"> Please enter your username </label>
+        <div>
+          <input type="text" v-model="username" id="usernameInput">
+        </div>
+      </form>
+    </div>
+    <b-button pill variant="outline-primary" v-on:click="setUser(username)">
       Go
-    </button>
-    <button v-on:click="createNewUser(username)">
+    </b-button>
+    <b-button pill variant="outline-primary" v-on:click="createNewUser(username)">
       Create User
-    </button>
+    </b-button>
   </div>
 </template>
 
@@ -48,5 +52,13 @@
   }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+#userSubmission {
+  margin-top: 100px;
+  margin-bottom: 20px;
+}
+label {
+  font-size: 200%;
+}
+
 </style>

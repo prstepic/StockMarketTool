@@ -1,21 +1,21 @@
 <template>
   <!-- div to contain router links that will link to different pages -->
   <div id="navBar">
-    <router-link to="/" id="homeLink">
-      <p> Home </p>
-    </router-link>
-    <router-link :to="goToUserHome()" id="dashLink">
-      <p> Dashboard </p>
-    </router-link>
-    <router-link to="/djia" id="dowLink">
-      <p> Dow Jones </p>
-    </router-link>
-    <router-link to="/ixic" id="nasLink">
-      <p> NASDAQ </p>
-    </router-link>
-    <router-link to="/inx" id="sapLink">
-      <p> S &amp; P 500</p>
-    </router-link>
+    <b-button pill variant="outline-primary" to="/" id="homeLink">
+      Home
+    </b-button>
+    <b-button pill variant="outline-primary" :to="goToUserHome()" id="dashLink">
+      Dashboard
+    </b-button>
+    <b-button pill variant="outline-primary" to="/djia" id="dowLink">
+      Dow Jones
+    </b-button>
+    <b-button pill variant="outline-primary" to="/ixic" id="nasLink">
+      NASDAQ
+    </b-button>
+    <b-button pill variant="outline-primary" to="/inx" id="sapLink">
+      S &amp; P 500
+    </b-button>
   </div>
 </template>
 
@@ -33,9 +33,9 @@
   }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
   #navBar {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(5, 1fr);
   }
 </style>

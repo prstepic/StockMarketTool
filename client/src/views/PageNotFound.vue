@@ -1,9 +1,9 @@
 <template>
   <div class="pageView">
     <h1> 404: Not Found </h1>
-    <button v-on:click="backHome">
+    <b-button pill variant="outline-primary" v-on:click="backHome">
       Back Home
-    </button>
+    </b-button>
   </div>
 </template>
 
@@ -18,8 +18,9 @@
   }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
   h1 {
-    text-align: center;
+    margin-top: 100px;
+    color: #ab8bc9;
   }
 </style>

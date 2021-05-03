@@ -7,13 +7,13 @@
   -->
   <div class="pageView" v-if="stockList">
     <StockGrid :stocks="stockList" :user="this.$route.params.username" />
-    <form>
+    <form class="addStockForm">
       <label for="stockAddInput"> Add stock: </label>
       <input type="text" v-model="stockName" id="stockAddInput">
     </form>
-    <button v-on:click="addStock(stockName)">
+    <b-button pill variant="outline-primary" v-on:click="addStock(stockName)">
       Add Stock To Dashboard
-    </button>
+    </b-button>
   </div>
   <PageNotFound v-else/>
 </template>
@@ -51,7 +51,7 @@
           .then( (response) => {
             this.stockList.push({
               ticker: upperTicker,
-              lastPrice: response.data
+              tickerData: response.data
             })
           })
           .catch( (error) => {
@@ -84,8 +84,14 @@
 </script>
 
 <style scoped>
-  h1 {
-    color: red;
+  .pageView {
+    margin-top: 20px;
+  }
+  .addStockForm {
+    margin-top: 50px;
+  }
+  #stockAddInput {
+    margin-bottom: 20px;
   }
 </style>
 
