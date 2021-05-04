@@ -12,8 +12,9 @@
     <b-button pill variant="outline-primary" :to="'/detailed/' + stock.ticker"> 
       View stock 
     </b-button> 
-    <b-button pill variant="outline-primary" v-on:click="$emit('stockRemovalItem', stock.ticker)">
-      Remove from Dashboard
+    <b-button pill variant="outline-primary" v-on:click="emitRemoval(stock.ticker)" :disabled="!isEnabled">
+      <span v-if="isEnabled"> Remove from Dashboard </span>
+      <b-spinner small v-else></b-spinner>
     </b-button>
   </div>
     
@@ -33,7 +34,8 @@
         day: '',
         year: '',
         priceColor: '#1ce63a',
-        dayDifference: 0
+        dayDifference: 0,
+        isEnabled: true
       }
     },
     created() {
@@ -44,6 +46,12 @@
       this.dayDifference = (this.stock.tickerData.c - this.stock.tickerData.o).toFixed(2)
       if(this.dayDifference < 0) {
         this.priceColor = '#e02f61'
+      }
+    },
+    methods: {
+      emitRemoval(stock) {
+        this.isEnabled=false
+        this.$emit('stockRemovalItem', stock)
       }
     }
   }

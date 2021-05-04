@@ -8,11 +8,13 @@
         </div>
       </form>
     </div>
-    <b-button pill variant="outline-primary" v-on:click="setUser(username)">
-      Go
+    <b-button pill variant="outline-primary" v-on:click="setUser(username)" :disabled="!settingUser">
+      <span v-if="settingUser"> Go </span>
+      <b-spinner small v-else></b-spinner>
     </b-button>
-    <b-button pill variant="outline-primary" v-on:click="createNewUser(username)">
-      Create User
+    <b-button pill variant="outline-primary" v-on:click="createNewUser(username)" :disabled="!newUserEnabled">
+      <span v-if="newUserEnabled"> Create User </span>
+      <b-spinner small v-else></b-spinner>
     </b-button>
   </div>
 </template>
@@ -23,21 +25,27 @@
     name: "LandingPage",
     data() {
       return {
-        username: ''
+        username: '',
+        newUserEnabled: true,
+        settingUser: true
       }
     },
     methods: { 
       setUser(user) {
+        this.settingUser = false
         localStorage.setItem('username', user)
         const userPage = '/' + user + '/homepage'
         this.userName = user
         this.$parent.currentUser = user
         this.$router.push(userPage)
+        this.settingUser = true
       },
       createNewUser(user) {
+        this.newUserEnabled = false
         axios.post('/API/addUser', {requestingUser: user})
         .then( () => {
           alert('User created!')
+          this.newUserEnabled = true
         })
         .catch( (error) => {
           if(error.response.status == 409) {
@@ -46,6 +54,7 @@
           else {
             alert('Unable to create user')
           }
+          this.newUserEnabled = true
         })
       }
     }
