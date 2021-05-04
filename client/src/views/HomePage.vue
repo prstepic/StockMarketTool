@@ -10,8 +10,8 @@
       <StockGrid :stocks="stockList" 
       :user="this.$route.params.username" 
       v-if="listLoaded"/>
-      <form class="addStockForm">
-        <label for="stockAddInput"> Add stock: </label>
+      <form class="addStockForm" autocomplete="off">
+        <label for="stockAddInput"> Add stock: </label> <br>
         <input type="text" v-model="stockName" id="stockAddInput">
       </form>
       <b-button pill variant="outline-primary" v-on:click="addStock(stockName)" :disabled="!addStockLoaded">
@@ -19,7 +19,9 @@
         <b-spinner small v-else></b-spinner>
       </b-button>
     </div>
-    <b-spinner variant="light" v-else></b-spinner>
+    <div class="spinner" v-else>
+      <b-spinner variant="light"></b-spinner>
+    </div>
   </div>
   <PageNotFound v-else/>
 </template>
@@ -106,6 +108,9 @@
   }
   #stockAddInput {
     margin-bottom: 20px;
+  }
+  .spinner {
+    margin-top: 100px;
   }
 </style>
 

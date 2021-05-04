@@ -2,7 +2,14 @@
   <!-- Display the detailed information of a stock using the StockDetail component 
   StockDetail's stockSymbol prop value will be filled with symbol using v-bind
   -->
-  <StockDetail :stockSymbol="symbol" />
+  <div class="pageView">
+    <div class="summary" v-if="isLoaded">
+      <StockDetail :stockSymbol="symbol"/>
+    </div>
+    <div class="spinner" v-else>
+      <b-spinner variant="light"></b-spinner>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -24,7 +31,8 @@
           currentPrice: '',
           prevClose: '',
           dayDiff: ''
-        }
+        },
+        isLoaded: false
       }
     },
     components: {
@@ -40,10 +48,12 @@
         this.symbol.lowPrice = (response.data.l).toFixed(2)
         this.symbol.currentPrice = (response.data.c).toFixed(2)
         this.symbol.prevClose = (response.data.pc).toFixed(2)
-        this.symbol.dayDiff = (this.symbol.currentPrice - this.symbol.openPrice).toFixed(2)
+        this.symbol.dayDiff = (this.symbol.currentPrice - this.symbol.prevClose).toFixed(2)
+        this.isLoaded = true
       })
       .catch( (error) => {
         console.log(error)
+        this.isLoaded = true
         this.symbol = null
       })
     }
@@ -51,5 +61,7 @@
 </script>
 
 <style scoped>
-  
+  .spinner {
+    margin-top:100px;
+  }
 </style>

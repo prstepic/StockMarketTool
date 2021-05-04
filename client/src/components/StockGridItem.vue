@@ -9,13 +9,19 @@
     <h5 class="tickerPrice"> ${{ (stock.tickerData.c).toFixed(2)}} </h5>
     <p class="dayChange" :style="{color: priceColor}"> {{ dayDifference}} </p>
     <p class="marketDate"> {{ month }}/{{ day }}/{{ year }} </p>
-    <b-button pill variant="outline-primary" :to="'/detailed/' + stock.ticker"> 
-      View stock 
-    </b-button> 
-    <b-button pill variant="outline-primary" v-on:click="emitRemoval(stock.ticker)" :disabled="!isEnabled">
-      <span v-if="isEnabled"> Remove from Dashboard </span>
-      <b-spinner small v-else></b-spinner>
-    </b-button>
+    <div class="buttons">
+      <div class="viewButton">
+        <b-button pill variant="outline-primary" :to="'/detailed/' + stock.ticker"> 
+          View stock 
+        </b-button> 
+      </div>
+      <div class="removeButton">
+        <b-button pill variant="outline-primary" v-on:click="emitRemoval(stock.ticker)" :disabled="!isEnabled">
+          <span v-if="isEnabled"> Remove from Dashboard </span>
+          <b-spinner small v-else></b-spinner>
+        </b-button>
+      </div>
+    </div>
   </div>
     
 </template>
@@ -43,7 +49,7 @@
       this.month = d.getMonth() + 1
       this.day = d.getDate()
       this.year = d.getFullYear()
-      this.dayDifference = (this.stock.tickerData.c - this.stock.tickerData.o).toFixed(2)
+      this.dayDifference = (this.stock.tickerData.c - this.stock.tickerData.pc).toFixed(2)
       if(this.dayDifference < 0) {
         this.priceColor = '#e02f61'
       }
@@ -60,9 +66,11 @@
 <style scoped>
   .stockItem {
     border: 1px solid #ab8bc9;
+    border-radius: 20px
   }
   h3 {
     color: #17e610;
+    margin-top: 5px;
   }
   .tickerPrice {
     color: #ab8bc9;
@@ -71,8 +79,14 @@
   p {
     color: #ab8bc9;
   }
-
   .dayChange {
     margin-bottom: 10px;
+  }
+  .buttons {
+    margin-bottom: 5px;
+    padding: 2px;
+  }
+  .viewButton {
+    margin-bottom: 5px;
   }
 </style>

@@ -1,10 +1,11 @@
 <template>
   <div class="submissionPage">
     <div id="userSubmission">
-      <form>
+      <form autocomplete="off">
         <label for="usernameInput"> Please enter your username </label>
         <div>
           <input type="text" v-model="username" id="usernameInput">
+          <input type="submit" style="display: none" />
         </div>
       </form>
     </div>
