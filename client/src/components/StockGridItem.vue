@@ -8,11 +8,12 @@
     <h3 class="tickerName" :style="{color: priceColor}"> {{ stock.ticker }} </h3>
     <h5 class="tickerPrice"> ${{ (stock.tickerData.c).toFixed(2)}} </h5>
     <p class="dayChange" :style="{color: priceColor}"> {{ dayDifference}} </p>
+    <p class="marketTime"> {{ hours }}:{{ minutes }} {{ pmOrAM }} </p>
     <p class="marketDate"> {{ month }}/{{ day }}/{{ year }} </p>
     <div class="buttons">
       <div class="viewButton">
         <b-button pill variant="outline-primary" :to="'/detailed/' + stock.ticker"> 
-          View stock 
+          <span> View stock </span>
         </b-button> 
       </div>
       <div class="removeButton">
@@ -39,6 +40,10 @@
         month: '',
         day: '',
         year: '',
+        seconds: '',
+        minutes: '',
+        hours: '',
+        pmOrAM: '',
         priceColor: '#1ce63a',
         dayDifference: 0,
         isEnabled: true
@@ -49,6 +54,20 @@
       this.month = d.getMonth() + 1
       this.day = d.getDate()
       this.year = d.getFullYear()
+      this.minutes = d.getMinutes()
+      const military = d.getHours()
+      if(military > 12) {
+        this.pmOrAM = 'PM'
+        this.hours = military - 12
+      }
+      else if(military == 0){
+        this.pmOrAM = 'AM'
+        this.hours = 12
+      }
+      else {
+        this.pmOrAm = 'AM'
+        this.hours = military
+      }
       this.dayDifference = (this.stock.tickerData.c - this.stock.tickerData.pc).toFixed(2)
       if(this.dayDifference < 0) {
         this.priceColor = '#e02f61'
@@ -73,11 +92,11 @@
     margin-top: 5px;
   }
   .tickerPrice {
-    color: #ab8bc9;
+    color: white;
     font-weight: bold;
   }
   p {
-    color: #ab8bc9;
+    color: white;
   }
   .dayChange {
     margin-bottom: 10px;
@@ -88,5 +107,8 @@
   }
   .viewButton {
     margin-bottom: 5px;
+  }
+  .marketTime {
+    margin-bottom: 2px;
   }
 </style>

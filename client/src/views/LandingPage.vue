@@ -5,7 +5,6 @@
         <label for="usernameInput"> Please enter your username </label>
         <div>
           <input type="text" v-model="username" id="usernameInput">
-          <input type="submit" style="display: none" />
         </div>
       </form>
     </div>
@@ -70,5 +69,4 @@
 label {
   font-size: 200%;
 }
-
 </style>

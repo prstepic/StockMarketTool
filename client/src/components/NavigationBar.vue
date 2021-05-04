@@ -2,19 +2,19 @@
   <!-- div to contain router links that will link to different pages -->
   <div id="navBar">
     <b-button pill variant="outline-primary" to="/" id="homeLink">
-      Home
+      <span> Home </span>
     </b-button>
     <b-button pill variant="outline-primary" :to="goToUserHome()" id="dashLink">
-      Dashboard
+      <span> Dashboard </span>
     </b-button>
     <b-button pill variant="outline-primary" to="/djia" id="dowLink">
-      Dow Jones
+      <span> Dow Jones </span>
     </b-button>
     <b-button pill variant="outline-primary" to="/ixic" id="nasLink">
-      NASDAQ
+      <span> NASDAQ </span>
     </b-button>
     <b-button pill variant="outline-primary" to="/inx" id="sapLink">
-      S &amp; P 500
+      <span> S &amp; P 500 </span>
     </b-button>
   </div>
 </template>
