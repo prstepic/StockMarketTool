@@ -27,6 +27,7 @@
     props: ['stocks', 'user'],
     methods: {
       removeStock(stockToRemove){
+        this.itemToBeDeleted = stockToRemove
         const indexOfStock = this.findIndex(stockToRemove, this.stocks)
         if(indexOfStock != -1){
           axios.post('/API/removeStockFromList', {

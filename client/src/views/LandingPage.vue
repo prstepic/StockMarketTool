@@ -1,15 +1,26 @@
 <template>
   <div class="submissionPage">
-    <form>
-      <label for="usernameInput"> Please enter your username </label>
-      <input type="text" v-model="username" id="usernameInput">
-    </form>
-    <button v-on:click="setUser(username)">
-      Go
-    </button>
-    <button v-on:click="createNewUser(username)">
-      Create User
-    </button>
+    <div id="userSubmission">
+      <form autocomplete="off">
+        <label for="usernameInput"> Please enter your username </label>
+        <div>
+          <input type="text" v-model="username" id="usernameInput">
+        </div>
+      </form>
+    </div>
+    <div class="goButton">
+      <b-button pill variant="outline-primary" v-on:click="setUser(username)" :disabled="!settingUser">
+        <span v-if="settingUser"> Go </span>
+        <b-spinner small v-else></b-spinner>
+      </b-button>
+    </div>
+    <p> or </p>
+    <div class="createButton">
+      <b-button pill variant="outline-primary" v-on:click="createNewUser(username)" :disabled="!newUserEnabled">
+        <span v-if="newUserEnabled"> Create User </span>
+        <b-spinner small v-else></b-spinner>
+      </b-button>
+    </div>
   </div>
 </template>
 
@@ -19,21 +30,27 @@
     name: "LandingPage",
     data() {
       return {
-        username: ''
+        username: '',
+        newUserEnabled: true,
+        settingUser: true
       }
     },
     methods: { 
       setUser(user) {
+        this.settingUser = false
         localStorage.setItem('username', user)
         const userPage = '/' + user + '/homepage'
         this.userName = user
         this.$parent.currentUser = user
         this.$router.push(userPage)
+        this.settingUser = true
       },
       createNewUser(user) {
+        this.newUserEnabled = false
         axios.post('/API/addUser', {requestingUser: user})
         .then( () => {
           alert('User created!')
+          this.newUserEnabled = true
         })
         .catch( (error) => {
           if(error.response.status == 409) {
@@ -42,11 +59,26 @@
           else {
             alert('Unable to create user')
           }
+          this.newUserEnabled = true
         })
       }
     }
   }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+#userSubmission {
+  margin-top: 100px;
+  margin-bottom: 20px;
+}
+label {
+  font-size: 200%;
+}
+.goButton {
+  margin-bottom: 2px;
+}
+p {
+  color: white;
+  margin-bottom: 2px;
+}
 </style>

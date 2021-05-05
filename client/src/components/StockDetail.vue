@@ -3,9 +3,11 @@
   The stock information comes from the prop value stockSymbol
   -->
   <div class="detailedPage" v-if="stockSymbol">
-    <h1 class="symbolTitle"> {{ stockSymbol.ticker }} </h1>
+    <h1 class="symbolTitle" :style="{color: priceColor}" > {{ stockSymbol.ticker }} </h1>
     <p class="lastPrice"> Last Price: ${{ stockSymbol.currentPrice }} </p>
-    <p class="asOfDate"> As of: {{ currentDate().month }}/{{ currentDate().day }}/{{ currentDate().year }}</p>
+    <p class="dayChange" :style="{color: priceColor}"> Change: {{ stockSymbol.dayDiff }} </p>
+    <p class="timeOfDay"> As of: {{ hours }}:{{ minutes }} {{ pmOrAM }}</p>
+    <p class="asOfDate"> {{ month }}/{{ day }}/{{ year }}</p>
     <p class="marketHours"
       v-show="!isMarketOpen()"
     >
@@ -27,28 +29,61 @@
   export default {
     name: 'StockDetail',
     props: ['stockSymbol'],
+    data() {
+      return {
+        month: '',
+        day: '',
+        year: '',
+        seconds: '',
+        minutes: '',
+        hours: '',
+        pmOrAM: '',
+        priceColor: '#1ce63a',
+        marketOpen: true
+      }
+    },
     methods: {
       isMarketOpen() { 
-        var d = new Date()
-        var minutes = d.getMinutes()
-        var hours = d.getHours()
-        var day = d.getDay()
-        if((day > 0 && day < 6) && ((hours > 8 && hours < 15) || (hours == 8 && minutes > 30 && hours < 15))){
-          return true
+        if((this.day > 0 && this.day < 6) && ((this.hours > 8 && this.hours < 15) || (this.hours == 8 && this.minutes > 30 && this.hours < 15))){
+          this.marketOpen = true
         }
         else {
-          return false
+          this.marketOpen = false
         }
       },
-      currentDate() {
-        var d = new Date()
-        var today = {
-          month: d.getMonth() + 1,
-          day: d.getDate(),
-          year: d.getFullYear()
+      getDayChange() {
+        if(this.stockSymbol.dayDiff < 0){
+          this.priceColor = '#e02f61'
         }
-        return today
+        else {
+          this.priceColor = '#1ce63a'
+        }
       }
+    },
+    created() {
+      var d = new Date()
+      this.month = d.getMonth() + 1
+      this.day = d.getDate()
+      this.year = d.getFullYear()
+      this.minutes = d.getMinutes()
+      const military = d.getHours()
+      if(military > 12) {
+        this.pmOrAM = 'PM'
+        this.hours = military - 12
+      }
+      else if(military == 0){
+        this.pmOrAM = 'AM'
+        this.hours = 12
+      }
+      else {
+        this.pmOrAm = 'AM'
+        this.hours = military
+      }
+      if(this.minutes < 10) {
+        this.minutes = '0' + this.minutes
+      }
+      this.isMarketOpen()
+      this.getDayChange()
     },
     components: {
       PageNotFound
@@ -57,4 +92,13 @@
 </script>
 
 <style scoped>
+  .symbolTitle {
+    margin-top: 50px;
+  }
+  p {
+    color: #ab8bc9;
+  }
+  .lastPrice {
+    font-weight: bold;
+  }
 </style>

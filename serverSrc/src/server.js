@@ -48,7 +48,7 @@ app.get('/API/user/:username/stockList', (req, res) => {
         for(var i = 0; i < responses.length; i++){
           listToReturn.push({
             ticker: result.listOfStocks[i],
-            lastPrice: responses[i].data.c
+            tickerData: responses[i].data
           })
         }
         return listToReturn
@@ -74,33 +74,48 @@ app.get('/API/user/:username/stockList', (req, res) => {
 
 app.get('/API/DowJones', (req, res) => {
   finnhubClient.quote('DIA', (error, data, response) => {
-    if(data.c != 0 && !error){
-      res.status(200).json(data)
+    if(data){
+      if(data.c != 0 && !error){
+        res.status(200).json(data)
+      }
+      else{
+        res.status(500).json('Internal Server Error')
+      }
     }
-    else{
-      res.status(404).json('Server error')
+    else {
+      res.status(404).json('Can not retrieve symbol')
     }
   })
 })
 
 app.get('/API/NASDAQ', (req, res) => {
   finnhubClient.quote('QQQ', (error, data, response) => {
-    if(data.c != 0 && !error){
-      res.status(200).json(data)
+    if(data){
+      if(data.c != 0 && !error){
+        res.status(200).json(data)
+      }
+      else{
+        res.status(500).json('Internal Server Error')
+      }
     }
     else {
-      res.status(404).json('Server error')
+      res.status(404).json('Can not retrieve symbol')
     }
   })
 })
 
 app.get('/API/SandP500', (req, res) => {
   finnhubClient.quote('SPY', (error, data, response) => {
-    if(data.c != 0 && !error){
-      res.status(200).json(data)
+    if(data){
+      if(data.c != 0 && !error){
+        res.status(200).json(data)
+      }
+      else{
+        res.status(500).json('Internal Server Error')
+      }
     }
     else {
-      res.status(404).json('Server error')
+      res.status(404).json('Can not retrieve symbol')
     }
   })
 })
@@ -108,8 +123,13 @@ app.get('/API/SandP500', (req, res) => {
 app.get('/API/info/:symbol', (req, res) => {
   const symb = req.params.symbol
   finnhubClient.quote(symb, (error, data, response) => {
-    if(data.c != 0 && !error){
-      res.status(200).json(data)
+    if(data){
+      if(data.c != 0 && !error){
+        res.status(200).json(data)
+      }
+      else{
+        res.status(500).json('Internal Server Error')
+      }
     }
     else {
       res.status(404).json('Can not retrieve symbol')
@@ -121,23 +141,28 @@ app.post('/API/addStockToList', (req, res) => {
   const stockToGet = req.body.stockTicker
   const requestedUser = req.body.userName
   finnhubClient.quote(stockToGet, (error, data, response) => {
-    if(data.c != 0 && !error) {
-      const client = new MongoDBClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
-      client.connect()
-      .then( () => {
-        const dbClient = client.db(mongoCreds.dbName)
-        const userLists = dbClient.collection(mongoCreds.collection)
-        return userLists.updateOne( { userName: requestedUser }, { $addToSet: { listOfStocks: stockToGet } } )
-      })
-      .then( () => {
-        client.close()
-        res.status(200).json(data.c)
-      })
-      .catch( (error) => {
-        console.log(error)
-        client.close()
+    if(data){
+      if(data.c != 0 && !error) {
+        const client = new MongoDBClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+        client.connect()
+        .then( () => {
+          const dbClient = client.db(mongoCreds.dbName)
+          const userLists = dbClient.collection(mongoCreds.collection)
+          return userLists.updateOne( { userName: requestedUser }, { $addToSet: { listOfStocks: stockToGet } } )
+        })
+        .then( () => {
+          client.close()
+          res.status(200).json(data)
+        })
+        .catch( (error) => {
+          console.log(error)
+          client.close()
+          res.status(500).json('Internal Server Error')
+        })
+      }
+      else {
         res.status(500).json('Internal Server Error')
-      })
+      }
     }
     else{
       res.status(404).json('Can not retrieve symbol')

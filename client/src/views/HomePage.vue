@@ -6,14 +6,22 @@
   it then passes on to each StockGridItem
   -->
   <div class="pageView" v-if="stockList">
-    <StockGrid :stocks="stockList" :user="this.$route.params.username" />
-    <form>
-      <label for="stockAddInput"> Add stock: </label>
-      <input type="text" v-model="stockName" id="stockAddInput">
-    </form>
-    <button v-on:click="addStock(stockName)">
-      Add Stock To Dashboard
-    </button>
+    <div class="stockList" v-if="listLoaded">
+      <StockGrid :stocks="stockList" 
+      :user="this.$route.params.username" 
+      v-if="listLoaded"/>
+      <form class="addStockForm" autocomplete="off">
+        <label for="stockAddInput"> Add stock: </label> <br>
+        <input type="text" v-model="stockName" id="stockAddInput">
+      </form>
+      <b-button pill variant="outline-primary" v-on:click="addStock(stockName)" :disabled="!addStockLoaded">
+        <span v-if="addStockLoaded"> Add Stock To Dashboard </span>
+        <b-spinner small v-else></b-spinner>
+      </b-button>
+    </div>
+    <div class="spinner" v-else>
+      <b-spinner variant="light"></b-spinner>
+    </div>
   </div>
   <PageNotFound v-else/>
 </template>
@@ -30,7 +38,9 @@
     data() {
       return {
         stockList: [],
-        stockName: ''
+        stockName: '',
+        listLoaded: false,
+        addStockLoaded: true
       }
     },
     components: {
@@ -39,9 +49,11 @@
     },
     methods: {
       addStock(ticker) {
+        this.addStockLoaded = false
         const upperTicker = ticker.toUpperCase()
         if(this.foundInList(upperTicker)) {
           alert('Sorry, stock already in dashboard!')
+          this.addStockLoaded = true
         }
         else{
           axios.post('/API/addStockToList', {
@@ -51,12 +63,14 @@
           .then( (response) => {
             this.stockList.push({
               ticker: upperTicker,
-              lastPrice: response.data
+              tickerData: response.data,
             })
+            this.addStockLoaded = true
           })
           .catch( (error) => {
             alert('Sorry, stock not found!')
             console.log(error)
+            this.addStockLoaded = true
           })
         }
       },
@@ -74,18 +88,29 @@
       axios.get(userRequest)
       .then( (response) => {
         this.stockList = response.data
+        this.listLoaded = true
       })
       .catch((error) => {
         console.log(error)
         this.stockList = null
+        this.listLoaded = true
       })
     }
   }
 </script>
 
 <style scoped>
-  h1 {
-    color: red;
+  .pageView {
+    margin-top: 20px;
+  }
+  .addStockForm {
+    margin-top: 50px;
+  }
+  #stockAddInput {
+    margin-bottom: 20px;
+  }
+  .spinner {
+    margin-top: 100px;
   }
 </style>
 

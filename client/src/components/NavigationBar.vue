@@ -1,21 +1,21 @@
 <template>
   <!-- div to contain router links that will link to different pages -->
   <div id="navBar">
-    <router-link to="/" id="homeLink">
-      <p> Home </p>
-    </router-link>
-    <router-link :to="goToUserHome()" id="dashLink">
-      <p> Dashboard </p>
-    </router-link>
-    <router-link to="/djia" id="dowLink">
-      <p> Dow Jones </p>
-    </router-link>
-    <router-link to="/ixic" id="nasLink">
-      <p> NASDAQ </p>
-    </router-link>
-    <router-link to="/inx" id="sapLink">
-      <p> S &amp; P 500</p>
-    </router-link>
+    <b-button pill variant="outline-primary" exact-active-class="active" to="/" id="homeLink">
+      <span> Home </span>
+    </b-button>
+    <b-button pill variant="outline-primary" exact-active-class="active" :to="goToUserHome()" id="dashLink">
+      <span> Dashboard </span>
+    </b-button>
+    <b-button pill variant="outline-primary" exact-active-class="active" to="/djia" id="dowLink">
+      <span> Dow Jones </span>
+    </b-button>
+    <b-button pill variant="outline-primary" exact-active-class="active" to="/ixic" id="nasLink">
+      <span> NASDAQ </span>
+    </b-button>
+    <b-button pill variant="outline-primary" exact-active-class="active" to="/inx" id="sapLink">
+      <span> S &amp; P 500 </span>
+    </b-button>
   </div>
 </template>
 
@@ -33,9 +33,13 @@
   }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
   #navBar {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(5, 1fr);
   }
+  .active {
+    background-color: var(--primary);
+  }
+
 </style>
