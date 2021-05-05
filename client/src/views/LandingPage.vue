@@ -8,14 +8,19 @@
         </div>
       </form>
     </div>
-    <b-button pill variant="outline-primary" v-on:click="setUser(username)" :disabled="!settingUser">
-      <span v-if="settingUser"> Go </span>
-      <b-spinner small v-else></b-spinner>
-    </b-button>
-    <b-button pill variant="outline-primary" v-on:click="createNewUser(username)" :disabled="!newUserEnabled">
-      <span v-if="newUserEnabled"> Create User </span>
-      <b-spinner small v-else></b-spinner>
-    </b-button>
+    <div class="goButton">
+      <b-button pill variant="outline-primary" v-on:click="setUser(username)" :disabled="!settingUser">
+        <span v-if="settingUser"> Go </span>
+        <b-spinner small v-else></b-spinner>
+      </b-button>
+    </div>
+    <p> or </p>
+    <div class="createButton">
+      <b-button pill variant="outline-primary" v-on:click="createNewUser(username)" :disabled="!newUserEnabled">
+        <span v-if="newUserEnabled"> Create User </span>
+        <b-spinner small v-else></b-spinner>
+      </b-button>
+    </div>
   </div>
 </template>
 
@@ -68,5 +73,12 @@
 }
 label {
   font-size: 200%;
+}
+.goButton {
+  margin-bottom: 2px;
+}
+p {
+  color: white;
+  margin-bottom: 2px;
 }
 </style>

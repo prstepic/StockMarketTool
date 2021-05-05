@@ -6,7 +6,8 @@
     <h1 class="symbolTitle" :style="{color: priceColor}" > {{ stockSymbol.ticker }} </h1>
     <p class="lastPrice"> Last Price: ${{ stockSymbol.currentPrice }} </p>
     <p class="dayChange" :style="{color: priceColor}"> Change: {{ stockSymbol.dayDiff }} </p>
-    <p class="asOfDate"> As of: {{ month }}/{{ day }}/{{ year }}</p>
+    <p class="timeOfDay"> As of: {{ hours }}:{{ minutes }} {{ pmOrAM }}</p>
+    <p class="asOfDate"> {{ month }}/{{ day }}/{{ year }}</p>
     <p class="marketHours"
       v-show="!isMarketOpen()"
     >
@@ -77,6 +78,9 @@
       else {
         this.pmOrAm = 'AM'
         this.hours = military
+      }
+      if(this.minutes < 10) {
+        this.minutes = '0' + this.minutes
       }
       this.isMarketOpen()
       this.getDayChange()

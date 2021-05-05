@@ -68,6 +68,9 @@
         this.pmOrAm = 'AM'
         this.hours = military
       }
+      if(this.minutes < 10) {
+        this.minutes = '0' + this.minutes
+      }
       this.dayDifference = (this.stock.tickerData.c - this.stock.tickerData.pc).toFixed(2)
       if(this.dayDifference < 0) {
         this.priceColor = '#e02f61'
