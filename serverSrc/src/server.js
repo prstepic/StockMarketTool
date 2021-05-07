@@ -174,7 +174,6 @@ app.post('/API/addUser', (req, res) => {
   const requestedUser = req.body.requestingUser
   const client = new MongoDBClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
   client.connect()
-
   .then( () => {
     const dbClient = client.db(mongoCreds.dbName)
     const userLists = dbClient.collection(mongoCreds.collection)
@@ -214,20 +213,20 @@ app.post('/API/removeStockFromList', (req, res) => {
   const requestedUser = req.body.userName
   const stockToRemove = req.body.stockTicker
   const client = new MongoDBClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
-      client.connect()
-      .then( () => {
-        const dbClient = client.db(mongoCreds.dbName)
-        const userLists = dbClient.collection(mongoCreds.collection)
-        return userLists.updateOne({ userName: requestedUser }, { $pull: { listOfStocks: stockToRemove } } )
-      })
-      .then( () => {
-        client.close()
-        res.status(200).json('Stock Removed')
-      })
-      .catch( (error) => {
-        console.log(error)
-        client.close()
-        res.status(500).json('Internal Server Error')
-      })
+  client.connect()
+  .then( () => {
+    const dbClient = client.db(mongoCreds.dbName)
+    const userLists = dbClient.collection(mongoCreds.collection)
+    return userLists.updateOne({ userName: requestedUser }, { $pull: { listOfStocks: stockToRemove } } )
+  })
+  .then( () => {
+    client.close()
+    res.status(200).json('Stock Removed')
+  })
+  .catch( (error) => {
+    console.log(error)
+    client.close()
+    res.status(500).json('Internal Server Error')
+  })
 })
 
