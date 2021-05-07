@@ -230,3 +230,45 @@ app.post('/API/removeStockFromList', (req, res) => {
   })
 })
 
+app.get('/API/news/:symbol', (req, res) => {
+  const stockToGet = req.params.symbol
+  const d = new Date()
+  var dayOfMonth = d.getDate()
+  if(dayOfMonth < 10) {
+    dayOfMonth = '0' + String(dayOfMonth)
+  }
+  var month = d.getMonth() + 1
+  if(month < 10) {
+    month = '0' + String(month)
+  }
+  const year = d.getFullYear()
+  const today = String(year) + '-' + String(month) + '-' + String(dayOfMonth)
+  const beginningOfYear = String(year) + '-' + '01' + '-' + '01'
+  finnhubClient.companyNews(stockToGet, beginningOfYear, today, (error, data, response) => {
+    if(error || data.length == 0) {
+      console.log(error)
+      res.status(500).send('Internal Server Error')
+    }
+    else {
+      if(data.length > 10){
+        res.status(200).send(data.slice(data.length - 10))
+      }
+      else {
+        res.status(200).send(data)
+      }
+    }
+  })
+})
+
+app.get('/API/sentiment/:symbol', (req, res) => {
+
+})
+
+app.get('/API/recommendations/:symbol', (req, res) => {
+
+})
+
+app.get('/API/earnings/:symbol', (req, res) => {
+
+})
+

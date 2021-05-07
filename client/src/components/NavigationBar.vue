@@ -26,7 +26,7 @@
     props: ['username'],
     methods: {
       goToUserHome(){
-        const url = "/" + this.username + "/homepage"
+        const url = '/homepage'
         return url
       }
     }

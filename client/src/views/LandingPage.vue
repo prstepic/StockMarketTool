@@ -39,7 +39,7 @@
       setUser(user) {
         this.settingUser = false
         localStorage.setItem('username', user)
-        const userPage = '/' + user + '/homepage'
+        const userPage = '/homepage'
         this.userName = user
         this.$parent.currentUser = user
         this.$router.push(userPage)
