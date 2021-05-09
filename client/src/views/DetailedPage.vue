@@ -7,6 +7,17 @@
       <StockDetail :stockSymbol="symbol"/>
       <div class="additionalData">
         <CompanyNews :stockSymbol="symbol.ticker"/>
+        <div class="sentimentInfo"> 
+          <div class="sentimentContainer">
+            <StockSentiment :stockSymbol="symbol.ticker"/>
+          </div>
+          <div class="sentimentContainer">
+            <StockRecommendations :stockSymbol="symbol.ticker"/>
+          </div>
+        </div>
+        <div class="earningsContainter">
+          <StockEarnings :stockSymbol="symbol.ticker"/>
+        </div>
       </div>
     </div>
     <div class="spinner" v-else>
@@ -18,6 +29,9 @@
 <script>
   import StockDetail from '../components/StockDetail.vue'
   import CompanyNews from '../components/CompanyNews.vue'
+  import StockSentiment from '../components/StockSentiment.vue'
+  import StockRecommendations from '../components/StockRecommendations.vue'
+  import StockEarnings from '../components/StockEarnings.vue'
   import axios from 'axios'
   /* Export the Vue with name DetailedPage so it can be referenced elsewhere (i.e. the router)
   The symbol will be found in the Array of stocks using find()
@@ -41,7 +55,10 @@
     },
     components: {
       StockDetail,
-      CompanyNews
+      CompanyNews,
+      StockSentiment,
+      StockRecommendations,
+      StockEarnings
     },
     created() {
       const upperSymbol = this.$route.params.ticker.toUpperCase()
@@ -76,5 +93,8 @@
     gap: 50px;
     grid-auto-rows: minmax(200px, auto);
     margin-top: 75px;
+  }
+  .sentimentContainer {
+    margin-bottom: 50px;
   }
 </style>

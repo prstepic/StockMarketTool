@@ -245,30 +245,57 @@ app.get('/API/news/:symbol', (req, res) => {
   const today = String(year) + '-' + String(month) + '-' + String(dayOfMonth)
   const beginningOfYear = String(year) + '-' + '01' + '-' + '01'
   finnhubClient.companyNews(stockToGet, beginningOfYear, today, (error, data, response) => {
-    if(error || data.length == 0) {
+    if(error) {
       console.log(error)
-      res.status(500).send('Internal Server Error')
+      res.status(500).json('Internal Server Error')
     }
     else {
       if(data.length > 10){
-        res.status(200).send(data.slice(data.length - 10))
+        res.status(200).json(data.slice(data.length - 10))
       }
       else {
-        res.status(200).send(data)
+        res.status(200).json(data)
       }
     }
   })
 })
 
 app.get('/API/sentiment/:symbol', (req, res) => {
-
+  const stockToGet = req.params.symbol
+  finnhubClient.newsSentiment(stockToGet, (error, data, response) => {
+    if(error) {
+      console.log(error)
+      res.status(500).json('Internal Server Error')
+    }
+    else {
+      res.status(200).json(data)
+    }
+  })
 })
 
 app.get('/API/recommendations/:symbol', (req, res) => {
-
+  const stockToGet = req.params.symbol
+  finnhubClient.recommendationTrends(stockToGet, (error, data, response) => {
+    if(error) {
+      console.log(error)
+      res.status(500).json('Internal Server Error')
+    }
+    else {
+      res.status(200).json(data[0])
+    }
+  })
 })
 
 app.get('/API/earnings/:symbol', (req, res) => {
-
+  const stockToGet = req.params.symbol
+  finnhubClient.earningsCalendar({"symbol": stockToGet}, (error, data, response) => {
+    if(error) {
+      console.log(error)
+      res.status(500).json('Internal Server Error')
+    }
+    else {
+      res.status(200).json(data)
+    }
+  })
 })
 
