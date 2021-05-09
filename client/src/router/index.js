@@ -15,7 +15,7 @@ The '*' handles other url's not handled by the router
 */
 const routes = [
   {
-    path: '/:username/homepage',
+    path: '/homepage',
     name: 'Home',
     component: HomePage
   },

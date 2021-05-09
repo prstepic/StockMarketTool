@@ -174,7 +174,6 @@ app.post('/API/addUser', (req, res) => {
   const requestedUser = req.body.requestingUser
   const client = new MongoDBClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
   client.connect()
-
   .then( () => {
     const dbClient = client.db(mongoCreds.dbName)
     const userLists = dbClient.collection(mongoCreds.collection)
@@ -214,20 +213,89 @@ app.post('/API/removeStockFromList', (req, res) => {
   const requestedUser = req.body.userName
   const stockToRemove = req.body.stockTicker
   const client = new MongoDBClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
-      client.connect()
-      .then( () => {
-        const dbClient = client.db(mongoCreds.dbName)
-        const userLists = dbClient.collection(mongoCreds.collection)
-        return userLists.updateOne({ userName: requestedUser }, { $pull: { listOfStocks: stockToRemove } } )
-      })
-      .then( () => {
-        client.close()
-        res.status(200).json('Stock Removed')
-      })
-      .catch( (error) => {
-        console.log(error)
-        client.close()
-        res.status(500).json('Internal Server Error')
-      })
+  client.connect()
+  .then( () => {
+    const dbClient = client.db(mongoCreds.dbName)
+    const userLists = dbClient.collection(mongoCreds.collection)
+    return userLists.updateOne({ userName: requestedUser }, { $pull: { listOfStocks: stockToRemove } } )
+  })
+  .then( () => {
+    client.close()
+    res.status(200).json('Stock Removed')
+  })
+  .catch( (error) => {
+    console.log(error)
+    client.close()
+    res.status(500).json('Internal Server Error')
+  })
+})
+
+app.get('/API/news/:symbol', (req, res) => {
+  const stockToGet = req.params.symbol
+  const d = new Date()
+  var dayOfMonth = d.getDate()
+  if(dayOfMonth < 10) {
+    dayOfMonth = '0' + String(dayOfMonth)
+  }
+  var month = d.getMonth() + 1
+  if(month < 10) {
+    month = '0' + String(month)
+  }
+  const year = d.getFullYear()
+  const today = String(year) + '-' + String(month) + '-' + String(dayOfMonth)
+  const beginningOfYear = String(year) + '-' + '01' + '-' + '01'
+  finnhubClient.companyNews(stockToGet, beginningOfYear, today, (error, data, response) => {
+    if(error) {
+      console.log(error)
+      res.status(500).json('Internal Server Error')
+    }
+    else {
+      if(data.length > 10){
+        res.status(200).json(data.slice(data.length - 10))
+      }
+      else {
+        res.status(200).json(data)
+      }
+    }
+  })
+})
+
+app.get('/API/sentiment/:symbol', (req, res) => {
+  const stockToGet = req.params.symbol
+  finnhubClient.newsSentiment(stockToGet, (error, data, response) => {
+    if(error) {
+      console.log(error)
+      res.status(500).json('Internal Server Error')
+    }
+    else {
+      res.status(200).json(data)
+    }
+  })
+})
+
+app.get('/API/recommendations/:symbol', (req, res) => {
+  const stockToGet = req.params.symbol
+  finnhubClient.recommendationTrends(stockToGet, (error, data, response) => {
+    if(error) {
+      console.log(error)
+      res.status(500).json('Internal Server Error')
+    }
+    else {
+      res.status(200).json(data[0])
+    }
+  })
+})
+
+app.get('/API/earnings/:symbol', (req, res) => {
+  const stockToGet = req.params.symbol
+  finnhubClient.earningsCalendar({"symbol": stockToGet}, (error, data, response) => {
+    if(error) {
+      console.log(error)
+      res.status(500).json('Internal Server Error')
+    }
+    else {
+      res.status(200).json(data)
+    }
+  })
 })
 

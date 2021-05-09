@@ -8,7 +8,7 @@
   <div class="pageView" v-if="stockList">
     <div class="stockList" v-if="listLoaded">
       <StockGrid :stocks="stockList" 
-      :user="this.$route.params.username" 
+      :user="currentUser" 
       v-if="listLoaded"/>
       <form class="addStockForm" autocomplete="off">
         <label for="stockAddInput"> Add stock: </label> <br>
@@ -23,7 +23,11 @@
       <b-spinner variant="light"></b-spinner>
     </div>
   </div>
-  <PageNotFound v-else/>
+  <div class="notFound" v-else>
+    <PageNotFound />
+    <p> If you haven't already, create your user on the Home page </p>
+    <p> or try again later </p>
+  </div>
 </template>
 
 <script>
@@ -40,7 +44,8 @@
         stockList: [],
         stockName: '',
         listLoaded: false,
-        addStockLoaded: true
+        addStockLoaded: true,
+        currentUser: null
       }
     },
     components: {
@@ -49,29 +54,34 @@
     },
     methods: {
       addStock(ticker) {
-        this.addStockLoaded = false
-        const upperTicker = ticker.toUpperCase()
-        if(this.foundInList(upperTicker)) {
-          alert('Sorry, stock already in dashboard!')
-          this.addStockLoaded = true
-        }
-        else{
-          axios.post('/API/addStockToList', {
-          stockTicker: upperTicker,
-          userName: this.$route.params.username
-          })
-          .then( (response) => {
-            this.stockList.push({
-              ticker: upperTicker,
-              tickerData: response.data,
+        if(this.stockList.length < 20){
+          this.addStockLoaded = false
+          const upperTicker = ticker.toUpperCase()
+          if(this.foundInList(upperTicker)) {
+            alert('Sorry, stock already in dashboard!')
+            this.addStockLoaded = true
+          }
+          else{
+            axios.post('/API/addStockToList', {
+            stockTicker: upperTicker,
+            userName: this.currentUser
             })
-            this.addStockLoaded = true
-          })
-          .catch( (error) => {
-            alert('Sorry, stock not found!')
-            console.log(error)
-            this.addStockLoaded = true
-          })
+            .then( (response) => {
+              this.stockList.push({
+                ticker: upperTicker,
+                tickerData: response.data,
+              })
+              this.addStockLoaded = true
+            })
+            .catch( (error) => {
+              alert('Sorry, stock not found!')
+              console.log(error)
+              this.addStockLoaded = true
+            })
+          }
+        }
+        else {
+          alert('Sorry, Can not add more than 20 stocks')
         }
       },
       foundInList(stockTicker){
@@ -84,7 +94,8 @@
       }
     },
     created(){
-      const userRequest = '/API/user/' + this.$route.params.username + '/stockList'
+      this.currentUser = localStorage.getItem('username')
+      const userRequest = '/API/user/' + this.currentUser + '/stockList'
       axios.get(userRequest)
       .then( (response) => {
         this.stockList = response.data
@@ -111,6 +122,9 @@
   }
   .spinner {
     margin-top: 100px;
+  }
+  p {
+    color: white;
   }
 </style>
 

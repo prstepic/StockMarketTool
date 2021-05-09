@@ -96,7 +96,7 @@
     margin-top: 50px;
   }
   p {
-    color: #ab8bc9;
+    color: white;
   }
   .lastPrice {
     font-weight: bold;
