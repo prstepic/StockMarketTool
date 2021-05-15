@@ -24,7 +24,8 @@
   The component will contain a prop value, stockSymbol, in which its parent component can pass it a value
   The isMarketOpen function will return if the market is open or not to the component
   The currentDate function calculates the current date (MM/DD/YYYY) to the component
-  PageNotFound component will be used to display a 404 error for /detailed/<stock> if the stock is not found 
+  PageNotFound component will be used to display a 404 error for /detailed/<stock> if the stock is not found
+  StockDetail will receive a prop value of the stock symbol and will use Axios to get relevant data
   */
   export default {
     name: 'StockDetail',
@@ -43,6 +44,7 @@
       }
     },
     methods: {
+      // determines if the market is open or not (market is open 8:30am - 3:00pm)
       isMarketOpen() { 
         if((this.day > 0 && this.day < 6) && ((this.hours > 8 && this.hours < 15) || (this.hours == 8 && this.minutes > 30 && this.hours < 15))){
           this.marketOpen = true
@@ -51,6 +53,8 @@
           this.marketOpen = false
         }
       },
+
+      // update the price color based on whether the stock price is greater than last close (green-positive, red-negative)
       getDayChange() {
         if(this.stockSymbol.dayDiff < 0){
           this.priceColor = '#e02f61'
@@ -60,6 +64,9 @@
         }
       }
     },
+
+    // on component creation get the current time and determine if the market is open and whether the stock
+    // is up in price or down compared to last close
     created() {
       var d = new Date()
       this.month = d.getMonth() + 1

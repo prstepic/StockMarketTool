@@ -22,30 +22,32 @@
 </template>
 
 <script>
-import axios from 'axios'
-export default {
-  name: 'CompanyNews',
-  props: ['stockSymbol'],
-  data() {
-    return {
-      newsArray: null,
-      isLoaded: false
+  // This component will take in a stock as a prop and use the Finnhub.io API to get news on the stock
+  // this request will be made using Axios. Show a spinner until the news is loaded and isLoaded is updated
+  import axios from 'axios'
+  export default {
+    name: 'CompanyNews',
+    props: ['stockSymbol'],
+    data() {
+      return {
+        newsArray: null,
+        isLoaded: false
+      }
+    },
+    created() {
+      const requestUrl = '/API/news/' + this.stockSymbol
+      axios.get(requestUrl)
+      .then( (response) => {
+        this.newsArray = response.data
+        this.isLoaded = true
+      })
+      .catch( (error) => {
+        console.log(error)
+        this.newsArray = null
+        this.isLoaded = true
+      })
     }
-  },
-  created() {
-    const requestUrl = '/API/news/' + this.stockSymbol
-    axios.get(requestUrl)
-    .then( (response) => {
-      this.newsArray = response.data
-      this.isLoaded = true
-    })
-    .catch( (error) => {
-      console.log(error)
-      this.newsArray = null
-      this.isLoaded = true
-    })
   }
-}
 </script>
 
 <style scoped lang="scss">

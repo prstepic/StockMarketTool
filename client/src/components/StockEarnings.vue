@@ -23,6 +23,10 @@
 </template>
 
 <script>
+  /* 
+  This component will show the last earnings report of a given stock (report from Finnhub.io)
+  it will also show whether the company beat or missed estimated earnings and revenues
+  */
   import axios from 'axios'
   export default {
     name: 'StockEarnings',
@@ -36,6 +40,9 @@
         revBeatLabel: ''
       }
     },
+
+    // On creation get the data for last earnings and revenue reports
+    // Update the whether the company beat or missed the estimated reports and update styling
     created() {
       const requestUrl = '/API/earnings/' + this.stockSymbol
       axios.get(requestUrl)
@@ -74,24 +81,24 @@
 </script>
 
 <style scoped lang="scss">
-.title {
-  color: white;
-  margin-top: 10px;
-}
-.quarter {
-  color: white;
-}
-.epsInfo {
-  color: white;
-}
-.revInfo {
-  color: white;
-}
-.container {
-  border: 1px solid #ab8bc9;
-  border-radius: 20px;
-}
-.reportedDate {
-  color: white;
-}
+  .title {
+    color: white;
+    margin-top: 10px;
+  }
+  .quarter {
+    color: white;
+  }
+  .epsInfo {
+    color: white;
+  }
+  .revInfo {
+    color: white;
+  }
+  .container {
+    border: 1px solid #ab8bc9;
+    border-radius: 20px;
+  }
+  .reportedDate {
+    color: white;
+  }
 </style>

@@ -49,6 +49,8 @@
         isEnabled: true
       }
     },
+
+    // On creation get the current time and date
     created() {
       var d = new Date()
       this.month = d.getMonth() + 1
@@ -77,6 +79,7 @@
       }
     },
     methods: {
+      // emit a removal event to StockGrid (parent) with the stock symbol so it can be removed from the grid
       emitRemoval(stock) {
         this.isEnabled=false
         this.$emit('stockRemovalItem', stock)

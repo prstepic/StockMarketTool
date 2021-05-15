@@ -26,6 +26,8 @@
     },
     props: ['stocks', 'user'],
     methods: {
+      // this function will fire when the StockGrid component receives a removal event from StockGridItem
+      // it will remove the stock from the list of stocks and the item will be removed from the grid display
       removeStock(stockToRemove){
         this.itemToBeDeleted = stockToRemove
         const indexOfStock = this.findIndex(stockToRemove, this.stocks)

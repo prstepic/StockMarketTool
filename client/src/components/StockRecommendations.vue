@@ -8,6 +8,11 @@
 </template>
 
 <script>
+  /*
+  This component will display analyst stock recommendations using Finnhub.io
+  It will display the analyst buy, sell, and hold counts. The stockSymbol prop will be passed
+  by the parent view and will represent the stock symbol
+  */
   import axios from 'axios'
   export default {
     name: 'StockRecommendations',
@@ -17,6 +22,8 @@
         recommendations: null
       }
     },
+
+    // On creation get the recommendation report
     created() {
       const requestUrl = '/API/recommendations/' + this.stockSymbol
       axios.get(requestUrl)

@@ -21,6 +21,8 @@
 
 <script>
   // Export the component with name NavigationBar so it can be used elsewhere
+  // the home button will return to the user's homepage
+  // the user name will come from localStorage and be passed in by App.vue
   export default {
     name: 'NavigationBar',
     props: ['username'],
