@@ -36,6 +36,7 @@
   /* Export the Vue with name DetailedPage so it can be referenced elsewhere (i.e. the router)
   The symbol will be found in the Array of stocks using find()
   The StockDetail component will be used to show the information about a stock
+  the stock symbol for the view will come from the url route parameter at /detailed/:ticker
   */
   export default {
     name: 'DetailedPage',
@@ -60,6 +61,11 @@
       StockRecommendations,
       StockEarnings
     },
+    /*
+    On creation, get the stock symbol from the route parameter and make a get request to the server
+    the request will return current quote data for a given stock and will update the symbol data within
+    this component
+    */
     created() {
       const upperSymbol = this.$route.params.ticker.toUpperCase()
       this.symbol.ticker = upperSymbol

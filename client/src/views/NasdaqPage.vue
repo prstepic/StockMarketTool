@@ -38,6 +38,8 @@
     components: {
       StockDetail
     },
+
+    // On creation make a request to the server for info on QQQ (Invesco NASDAQ ETF)
     created() {
       axios.get('/API/NASDAQ')
       .then((response) => {

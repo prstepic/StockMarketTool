@@ -36,6 +36,7 @@
   import PageNotFound from './PageNotFound.vue'
   /* Export the Vue with name HomePage so it can be referenced elsewhere (i.e. the router)
   This Vue will use StockGrid to display different StockGridItems in a grid layout
+  This Vue wiill also allow users to add stocks to the StockGrid
   */
   export default {
     name: 'HomePage',
@@ -53,6 +54,9 @@
       PageNotFound
     },
     methods: {
+
+      // Add a stock to the stocklist array, this will update the passed prop value in StockGrid
+      // this will be done in a post request to the server, so it can also persist in the database
       addStock(ticker) {
         if(this.stockList.length < 20){
           this.addStockLoaded = false
@@ -93,6 +97,8 @@
         return false
       }
     },
+
+    // On creation get the current user's stock list by requesting the list from the server
     created(){
       this.currentUser = localStorage.getItem('username')
       const userRequest = '/API/user/' + this.currentUser + '/stockList'
