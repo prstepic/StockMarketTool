@@ -5,6 +5,10 @@ const axios = require('axios')
 
 import { loginInfo } from '../loginInfo'
 
+/*
+Create the Finnhub API Client and Express app
+Set the url path to the MongoDB
+*/
 const api_key = finnhub.ApiClient.instance.authentications['api_key']
 api_key.apiKey = loginInfo.finnhubKey
 const finnhubClient = new finnhub.DefaultApi()
@@ -16,14 +20,24 @@ const uri = 'mongodb+srv://' + mongoCreds.username + ':' + mongoCreds.password
 
 app.use(express.json())
 
+// The express interface will listen on port 9090 for connections
 app.listen(port, () => {
   console.log('Server Up')
 })
 
+// request for localhost:9090
+// TODO serve client files from this endpoint
 app.get('/', (req, res) => {
   res.send("Hello, the server is up")
 })
 
+/* 
+Endpoint that will return a user's stock list from the database.
+Flow: database connection -> find user in database, get user's stock list -> once user found, make Finnhub API
+requests for each stock in their list and Use axios.all to wait until all stock requests are complete ->
+Send the data to the client once axios requests are finished.
+Promises are used to ensure proper flow holds and data is filled before next step 
+*/
 app.get('/API/user/:username/stockList', (req, res) => {
   const user = req.params.username
   const client = new MongoDBClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
@@ -72,6 +86,7 @@ app.get('/API/user/:username/stockList', (req, res) => {
   })
 })
 
+// Endpoint to get quote data for the Dow Jones index using axios request to Finnhub.io
 app.get('/API/DowJones', (req, res) => {
   finnhubClient.quote('DIA', (error, data, response) => {
     if(data){
@@ -88,6 +103,7 @@ app.get('/API/DowJones', (req, res) => {
   })
 })
 
+// Endpoint to get quote data for the NASDAQ index using axios request to Finnhub.io
 app.get('/API/NASDAQ', (req, res) => {
   finnhubClient.quote('QQQ', (error, data, response) => {
     if(data){
@@ -104,6 +120,7 @@ app.get('/API/NASDAQ', (req, res) => {
   })
 })
 
+// Endpoint to get quote data for the S&P 500 index using axios request to Finnhub.io
 app.get('/API/SandP500', (req, res) => {
   finnhubClient.quote('SPY', (error, data, response) => {
     if(data){
@@ -120,6 +137,7 @@ app.get('/API/SandP500', (req, res) => {
   })
 })
 
+// Using the url parameter :symbol, get the stock symbol quote data using axios request to Finnhub.io
 app.get('/API/info/:symbol', (req, res) => {
   const symb = req.params.symbol
   finnhubClient.quote(symb, (error, data, response) => {
@@ -137,6 +155,13 @@ app.get('/API/info/:symbol', (req, res) => {
   })
 })
 
+/*
+Endpoint that will add a stock to a user's list
+Flow is make a request to Finnhub.io for the stock symbol provided in the body (using Axios) ->
+establish connection to the MongoDB if stock data available (if not, send error) -> 
+add the stock symbol to the user list in the database (client handles duplicate stock symbols) ->
+send an OK status to the client if no errors are caught
+*/
 app.post('/API/addStockToList', (req, res) => {
   const stockToGet = req.body.stockTicker
   const requestedUser = req.body.userName
@@ -170,6 +195,12 @@ app.post('/API/addStockToList', (req, res) => {
   })
 })
 
+/*
+Enpoint that will add a user to the database (initialized with empty stock list)
+Flow: establish a database connection -> find user in the database -> once search is complete,
+determine if the user is in the database, if so send back error. If not, initialize the user's
+stock list as empty and add to the database and send an OK response
+*/
 app.post('/API/addUser', (req, res) => {
   const requestedUser = req.body.requestingUser
   const client = new MongoDBClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
@@ -188,7 +219,7 @@ app.post('/API/addUser', (req, res) => {
           res.status(200).json('Successful user addition')
         })
         .catch( (error) => {
-          res.status(400).json('Internal Server Error')
+          res.status(500).json('Internal Server Error')
         })
       }
       else {
@@ -209,6 +240,11 @@ app.post('/API/addUser', (req, res) => {
   })
 })
 
+/*
+Endpoint that will remove a stock from the user's list (user and stock in request body)
+Flow: establish database connection -> update user's list by removing the targeted stock ->
+send an OK response if no errors are caught
+*/
 app.post('/API/removeStockFromList', (req, res) => {
   const requestedUser = req.body.userName
   const stockToRemove = req.body.stockTicker
@@ -230,6 +266,11 @@ app.post('/API/removeStockFromList', (req, res) => {
   })
 })
 
+/*
+Endpoint that will respond with a company's news (company symbol in url parameter :symbol)
+First format the date so it is readable by Finnhub.io. Get the news for the current year
+and return a max of the most recent 10 articles
+*/
 app.get('/API/news/:symbol', (req, res) => {
   const stockToGet = req.params.symbol
   const d = new Date()
@@ -260,6 +301,7 @@ app.get('/API/news/:symbol', (req, res) => {
   })
 })
 
+// Enpoint that will return the stock sentiment report using Axios request to Finnhub.io (stock in url param :symbol)
 app.get('/API/sentiment/:symbol', (req, res) => {
   const stockToGet = req.params.symbol
   finnhubClient.newsSentiment(stockToGet, (error, data, response) => {
@@ -273,6 +315,7 @@ app.get('/API/sentiment/:symbol', (req, res) => {
   })
 })
 
+// Enpoint that will return the stock recommendation report using Axios request to Finnhub.io (stock in url param :symbol)
 app.get('/API/recommendations/:symbol', (req, res) => {
   const stockToGet = req.params.symbol
   finnhubClient.recommendationTrends(stockToGet, (error, data, response) => {
@@ -286,6 +329,7 @@ app.get('/API/recommendations/:symbol', (req, res) => {
   })
 })
 
+// Enpoint that will return the stock earnings report using Axios request to Finnhub.io (stock in url param :symbol)
 app.get('/API/earnings/:symbol', (req, res) => {
   const stockToGet = req.params.symbol
   finnhubClient.earningsCalendar({"symbol": stockToGet}, (error, data, response) => {
@@ -298,4 +342,3 @@ app.get('/API/earnings/:symbol', (req, res) => {
     }
   })
 })
-
