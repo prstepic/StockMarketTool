@@ -301,7 +301,7 @@ app.get('/API/news/:symbol', (req, res) => {
   })
 })
 
-// Enpoint that will return the stock sentiment report using Axios request to Finnhub.io (stock in url param :symbol)
+// Endpoint that will return the stock sentiment report using Axios request to Finnhub.io (stock in url param :symbol)
 app.get('/API/sentiment/:symbol', (req, res) => {
   const stockToGet = req.params.symbol
   finnhubClient.newsSentiment(stockToGet, (error, data, response) => {
@@ -315,7 +315,7 @@ app.get('/API/sentiment/:symbol', (req, res) => {
   })
 })
 
-// Enpoint that will return the stock recommendation report using Axios request to Finnhub.io (stock in url param :symbol)
+// Endpoint that will return the stock recommendation report using Axios request to Finnhub.io (stock in url param :symbol)
 app.get('/API/recommendations/:symbol', (req, res) => {
   const stockToGet = req.params.symbol
   finnhubClient.recommendationTrends(stockToGet, (error, data, response) => {
@@ -329,7 +329,7 @@ app.get('/API/recommendations/:symbol', (req, res) => {
   })
 })
 
-// Enpoint that will return the stock earnings report using Axios request to Finnhub.io (stock in url param :symbol)
+// Endpoint that will return the stock earnings report using Axios request to Finnhub.io (stock in url param :symbol)
 app.get('/API/earnings/:symbol', (req, res) => {
   const stockToGet = req.params.symbol
   finnhubClient.earningsCalendar({"symbol": stockToGet}, (error, data, response) => {
