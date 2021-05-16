@@ -8,6 +8,8 @@
 </template>
 
 <script>
+  // this component will show a page not found view when data is not found
+  // backHome() will direct the user back to the log in screen
   export default {
     name: 'PageNotFound',
     methods: {

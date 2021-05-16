@@ -25,6 +25,11 @@
 </template>
 
 <script>
+  /*
+  This component is the landing page of the site. Users will be able to create usernames and 
+  view existing user's dashboards. This component will set the localStorage to the user that
+  enters their username
+  */
   import axios from 'axios'
   export default {
     name: "LandingPage",
@@ -36,6 +41,8 @@
       }
     },
     methods: { 
+      // set localStorage to 'user' so it can be obtained elsewhere on the site
+      // go to that user's homepage
       setUser(user) {
         this.settingUser = false
         localStorage.setItem('username', user)
@@ -45,6 +52,8 @@
         this.$router.push(userPage)
         this.settingUser = true
       },
+
+      // Using axios make a post request to the server to add the username with an empty list of stocks
       createNewUser(user) {
         this.newUserEnabled = false
         axios.post('/API/addUser', {requestingUser: user})

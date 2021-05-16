@@ -19,65 +19,72 @@
 </template>
 
 <script>
-import axios from 'axios'
-export default {
-  name: 'StockSentiment',
-  props: ['stockSymbol'],
-  data() {
-    return {
-      newsSentiment: null,
-      newsColorStock: '#e02f61',
-      newsColorSector: '#e02f61',
-      resultSentiment: '#e02f61',
-      isBetterThanSector: ''
+ /*
+  This component will display analyst stock news sentiment using Finnhub.io
+  It will display the bullish news sentiment compared to the company's sector. The stockSymbol prop will be passed
+  by the parent view and will represent the stock symbol
+  */
+  import axios from 'axios'
+  export default {
+    name: 'StockSentiment',
+    props: ['stockSymbol'],
+    data() {
+      return {
+        newsSentiment: null,
+        newsColorStock: '#e02f61',
+        newsColorSector: '#e02f61',
+        resultSentiment: '#e02f61',
+        isBetterThanSector: ''
+      }
+    },
+
+    // On creation get the news sentiment report
+    created() {
+      const requestUrl = '/API/sentiment/' + this.stockSymbol
+      axios.get(requestUrl)
+      .then( (response) => {
+        const sentiment = {
+          bullishNews: response.data.sentiment.bullishPercent,
+          sectorAvgBullish: response.data.sectorAverageBullishPercent
+        }
+        this.newsSentiment = sentiment
+        if(sentiment.bullishNews >= .5){
+          this.newsColorStock = '#1ce63a'
+        }
+        if(sentiment.sectorAvgBullish >= .5){
+          this.newsColorSector = '#1ce63a'
+        }
+        if(sentiment.bullishNews >= sentiment.sectorAvgBullish){
+          this.isBetterThanSector = 'Better'
+          this.resultSentiment = '#1ce63a'
+        }
+        else {
+          this.isBetterThanSector = 'Worse'
+        }
+      })
+      .catch( (error) => {
+        console.log(error)
+      })
     }
-  },
-  created() {
-    const requestUrl = '/API/sentiment/' + this.stockSymbol
-    axios.get(requestUrl)
-    .then( (response) => {
-      const sentiment = {
-        bullishNews: response.data.sentiment.bullishPercent,
-        sectorAvgBullish: response.data.sectorAverageBullishPercent
-      }
-      this.newsSentiment = sentiment
-      if(sentiment.bullishNews >= .5){
-        this.newsColorStock = '#1ce63a'
-      }
-      if(sentiment.sectorAvgBullish >= .5){
-        this.newsColorSector = '#1ce63a'
-      }
-      if(sentiment.bullishNews >= sentiment.sectorAvgBullish){
-        this.isBetterThanSector = 'Better'
-        this.resultSentiment = '#1ce63a'
-      }
-      else {
-        this.isBetterThanSector = 'Worse'
-      }
-    })
-    .catch( (error) => {
-      console.log(error)
-    })
   }
-}
 </script>
 
 <style scoped lang="scss">
-.stockNewsTitle {
-  color: white;
-}
-.sectorNewsTitle {
-  color: white;
-}
-.sentimentResult {
-  color: white;
-}
-.container {
-  border: 1px solid #ab8bc9;
-  border-radius: 20px;
-}
-.subSentiment {
-  color: white;
-  margin-top: 10px;
-}
+  .stockNewsTitle {
+    color: white;
+  }
+  .sectorNewsTitle {
+    color: white;
+  }
+  .sentimentResult {
+    color: white;
+  }
+  .container {
+    border: 1px solid #ab8bc9;
+    border-radius: 20px;
+  }
+  .subSentiment {
+    color: white;
+    margin-top: 10px;
+  }
 </style>

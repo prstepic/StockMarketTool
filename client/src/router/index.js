@@ -12,6 +12,9 @@ Vue.use(VueRouter)
 
 /* routes each url to a Vue in the project using the component: property
 The '*' handles other url's not handled by the router
+the homepage route will be the same for each user at /homepage
+the :ticker in /detailed/:ticker represents the route paramater that will be used by
+the DetailedPage view to get the stock symbol requested
 */
 const routes = [
   {

@@ -40,6 +40,8 @@
       StockDetail
     },
     created() {
+
+      // On creation make a request to the server for info on DIA (Dow Jones ETF)
       axios.get('/API/DowJones')
       .then((response) => {
         this.marketIndex.openPrice = (response.data.o).toFixed(2)

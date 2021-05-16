@@ -38,6 +38,8 @@
     components: {
       StockDetail
     },
+
+    // On creation make a request to the server for info on SPY (S&P 500 ETF)
     created() {
       axios.get('/API/SandP500')
       .then((response) => {
