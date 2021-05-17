@@ -4,7 +4,8 @@ const finnhub = require('finnhub')
 const axios = require('axios')
 
 import { loginInfo } from '../loginInfo'
-
+import history from 'connect-history-api-fallback'
+import path from 'path'
 /*
 Create the Finnhub API Client and Express app
 Set the url path to the MongoDB
@@ -15,10 +16,11 @@ const finnhubClient = new finnhub.DefaultApi()
 const mongoCreds = loginInfo.mongoAuth
 const app = express()
 const port = 9090
-const uri = 'mongodb+srv://' + mongoCreds.username + ':' + mongoCreds.password 
-            + '@stockmarkettoolcluster.ejvhb.mongodb.net/myFirstDatabase?retryWrites=true&w=majority'
+const uri = mongoCreds.mongoUrl
 
 app.use(express.json())
+app.use(express.static(path.join(__dirname, '../dist')))
+app.use(history())
 
 // The express interface will listen on port 9090 for connections
 app.listen(port, () => {
@@ -341,4 +343,9 @@ app.get('/API/earnings/:symbol', (req, res) => {
       res.status(200).json(data)
     }
   })
+})
+
+// Serve Vue front end to any path not handled by the API
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../dist/index.html'))
 })
